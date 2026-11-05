@@ -3,26 +3,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    public float Speed;
+    public float PlayerSpeed;
     private Vector2 InputValue;
-    private GameObject Player;
-    private Vector3 PlayerPosition;
+    private Rigidbody2D PlayerBody;
 
     void Awake()
     {
-        Player = gameObject;
-        Debug.Log(Player);
+        PlayerBody = gameObject.GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        PlayerPosition = InputValue; 
-        Player.transform.position += PlayerPosition * Speed * Time.deltaTime;
+        PlayerBody.linearVelocity = InputValue * PlayerSpeed;
     }
 
     void OnMove(InputValue value)
     {
         InputValue = value.Get<Vector2>();
-        Debug.Log("Moved. Input: " + InputValue); 
     }
 }

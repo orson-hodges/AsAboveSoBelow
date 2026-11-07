@@ -4,8 +4,9 @@ using UnityEngine.InputSystem;
 public class PlayerMovementScript : MonoBehaviour
 {
     public float PlayerSpeed;
-    private Vector2 InputValue;
     private Rigidbody2D PlayerBody;
+    protected Vector2 InputValue;
+
 
     void Awake()
     {

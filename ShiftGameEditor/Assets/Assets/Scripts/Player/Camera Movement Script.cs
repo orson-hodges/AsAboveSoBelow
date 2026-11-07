@@ -57,9 +57,9 @@ public class CameraMovementScript : MonoBehaviour
         }
 
         // Rolating the player to always face the position of the camera. Note that it is adding 90 instead of substracting, as the "front" of the player is techanically the botton of its sprite.
-        float AngleRadis = Mathf.Atan2(MousePosition.y - PlayerObject.transform.position.y, MousePosition.x - PlayerObject.transform.position.x);
-        float AngleDegree = (180 / Mathf.PI) * AngleRadis + 90;
-        PlayerObject.transform.rotation = Quaternion.Euler(0, 0, AngleDegree);
+        float CameraAngleRadis = Mathf.Atan2(MousePosition.y - PlayerObject.transform.position.y, MousePosition.x - PlayerObject.transform.position.x);
+        float CameraAngleDegree = (180 / Mathf.PI) * CameraAngleRadis + 90;
+        PlayerObject.transform.rotation = Quaternion.Euler(0, 0, CameraAngleDegree);
     }
 
     void SetPosition()

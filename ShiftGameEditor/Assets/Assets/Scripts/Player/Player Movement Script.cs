@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementScript : MonoBehaviour
 {
-    public float PlayerSpeed;
+    public float MovementSpeed;
     private Rigidbody2D PlayerBody;
     protected Vector2 InputValue;
 
@@ -15,7 +15,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        PlayerBody.linearVelocity = InputValue * PlayerSpeed;
+        PlayerBody.linearVelocity = InputValue * MovementSpeed;
     }
 
     void OnMove(InputValue value)

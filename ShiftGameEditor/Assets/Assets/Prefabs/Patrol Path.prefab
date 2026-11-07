@@ -78,7 +78,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6150248533339798248}
   m_Layer: 0
-  m_Name: Patrol Points
+  m_Name: Patrol Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

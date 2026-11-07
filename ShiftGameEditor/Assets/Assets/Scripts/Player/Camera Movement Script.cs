@@ -1,8 +1,5 @@
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 
 public class CameraMovementScript : MonoBehaviour
@@ -26,7 +23,7 @@ public class CameraMovementScript : MonoBehaviour
     {
         // Getting the position for the camera to be, which is a point between the player and the mouse, determined by the "Distance" variable.
         // Checking if the X axis of the mouse is larger or smaller to the X axis of the player, as this changes the maths needed for the camera's X axis. The camera's Y axis' formula is the same for both but depends on the camera's X axis.
-        MousePosition = ((Vector2)PlayerCamera.ScreenToWorldPoint(Input.mousePosition));
+        MousePosition = PlayerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         if (MousePosition.x > PlayerObject.transform.position.x)
         {
             XPosition = PlayerObject.transform.position.x + Mathf.Abs(PlayerObject.transform.position.x - MousePosition.x)/Distance;

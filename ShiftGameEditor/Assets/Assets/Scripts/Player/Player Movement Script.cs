@@ -5,7 +5,7 @@ public class PlayerMovementScript : MonoBehaviour
 {
     public float MovementSpeed;
     private Rigidbody2D PlayerBody;
-    protected Vector2 InputValue;
+    protected Vector2 InputDirection;
 
 
     void Awake()
@@ -15,11 +15,11 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        PlayerBody.linearVelocity = InputValue * MovementSpeed;
+        PlayerBody.linearVelocity = InputDirection * MovementSpeed;
     }
 
-    void OnMove(InputValue value)
+    void OnMove(InputValue inputdirectionvalue)
     {
-        InputValue = value.Get<Vector2>();
+        InputDirection = inputdirectionvalue.Get<Vector2>();
     }
 }

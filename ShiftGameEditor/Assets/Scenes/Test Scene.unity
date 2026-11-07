@@ -141,7 +141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5080246690434536202, guid: 60c35cd868de19b4e9789b8eaf5949bd, type: 3}
       propertyPath: m_Name
-      value: Patrol Points
+      value: Patrol Path
       objectReference: {fileID: 0}
     - target: {fileID: 6150248533339798248, guid: 60c35cd868de19b4e9789b8eaf5949bd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -801,6 +801,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1069999863839173400, guid: af4d626923b8b4b4bb50023151c308b9, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2993802518205072756, guid: af4d626923b8b4b4bb50023151c308b9, type: 3}
       propertyPath: m_Name
       value: Player Camera

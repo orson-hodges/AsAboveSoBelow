@@ -170,7 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2308331c1ddf9d44a2f89a78708a73f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NormalEnemyBehaviourScript
-  NormalEnemyWalkingSpeed: 0
-  NormalEnemyRunningSpeed: 0
-  NormalEnemyStrafing: 0
+  WalkingSpeed: 0
+  RunningSpeed: 0
+  StrafingSpeed: 0
+  PatrolPath: []
+  CurrentPartolPoint: 0
   CurrentState: 0

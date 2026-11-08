@@ -18,6 +18,11 @@ public class PlayerMovementScript : MonoBehaviour
         PlayerBody.linearVelocity = InputDirection * MovementSpeed;
     }
 
+    public void Die()
+    {
+        Debug.Log("omg you are so dead rn :O");
+    }
+
     void OnMove(InputValue inputdirectionvalue)
     {
         InputDirection = inputdirectionvalue.Get<Vector2>();

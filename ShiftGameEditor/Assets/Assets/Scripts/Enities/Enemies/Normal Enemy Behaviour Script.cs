@@ -27,7 +27,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     public GameObject[] PatrolPath;
     private int CurrentPartolPoint;
 
-    [SerializeField] private State CurrentState;
+    public State CurrentState;
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         NavigationMechAgent.updateUpAxis = false;
         NavigationMechAgent.speed = RunningSpeed;
 
-        PlayerObject = GameObject.Find("Player");
+        PlayerObject = GameObject.FindWithTag("Player");
 
         if (CurrentState == State.Idling)
         {

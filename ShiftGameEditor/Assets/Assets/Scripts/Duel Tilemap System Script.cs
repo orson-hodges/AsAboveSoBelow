@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static TileType;
 
-public class DuelTilemapSystemSprite : MonoBehaviour
+public class DuelTilemapSystemScript : MonoBehaviour
 {
     // The 4 neighours of each wall visuals tiles.
     private Vector3Int[] TileNeighbours = new Vector3Int[]

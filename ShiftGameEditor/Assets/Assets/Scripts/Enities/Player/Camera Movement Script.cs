@@ -1,37 +1,40 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 public class CameraMovementScript : MonoBehaviour
 {
     private Camera PlayerCamera;
     private GameObject PlayerObject;
     protected Vector2 MousePosition;
+    public Texture2D CursorSprite;
     
     // Where the camera is suppose to be at the X axis. 
     protected float XPosition;
     // How far along the "line" between the player and the mouse the camera will be. Acts as a divider (2 is the exact midpoint, 3 is 1/3th along from the player, etc).
-    public float Distance;  
+    public float DistanceRatio;  
 
     void Start()
     {
         PlayerCamera = Camera.main;
         PlayerObject = GameObject.FindWithTag("Player");
+
+        Cursor.SetCursor(CursorSprite, new Vector2(50, 50), CursorMode.ForceSoftware);
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void FixedUpdate()
     {
-        // Getting the position for the camera to be, which is a point between the player and the mouse, determined by the "Distance" variable.
+        // Getting the position for the camera to be, which is a point between the player and the mouse, determined by the "DistanceRatio" variable.
         // Checking if the X axis of the mouse is larger or smaller to the X axis of the player, as this changes the maths needed for the camera's X axis. The camera's Y axis' formula is the same for both but depends on the camera's X axis.
         MousePosition = PlayerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         if (MousePosition.x > PlayerObject.transform.position.x)
         {
-            XPosition = PlayerObject.transform.position.x + Mathf.Abs(PlayerObject.transform.position.x - MousePosition.x)/Distance;
+            XPosition = PlayerObject.transform.position.x + Mathf.Abs(PlayerObject.transform.position.x - MousePosition.x)/DistanceRatio;
             SetPosition();
         }
         else if (MousePosition.x < PlayerObject.transform.position.x)
         {
-            XPosition = PlayerObject.transform.position.x - Mathf.Abs(MousePosition.x - PlayerObject.transform.position.x)/Distance;
+            XPosition = PlayerObject.transform.position.x - Mathf.Abs(MousePosition.x - PlayerObject.transform.position.x)/DistanceRatio;
             SetPosition();
         }
         else if(MousePosition.x == PlayerObject.transform.position.x)
@@ -40,11 +43,11 @@ public class CameraMovementScript : MonoBehaviour
             // Checking if the Y axis of the mouse is larger or smaller to the Y axis of the player, as this changes the maths needed for the camera's Y axis. Due to the mouse and player's X axis being the same in this case, the camera's X axis must also be the same.
             if (MousePosition.y > PlayerObject.transform.position.y)
             {
-                transform.position = new Vector3(MousePosition.x, PlayerObject.transform.position.y + (Mathf.Abs(MousePosition.y - PlayerObject.transform.position.y)/Distance), -10);
+                transform.position = new Vector3(MousePosition.x, PlayerObject.transform.position.y + (Mathf.Abs(MousePosition.y - PlayerObject.transform.position.y)/DistanceRatio), -10);
             }
             else if (MousePosition.y < PlayerObject.transform.position.y)
             {
-                transform.position = new Vector3(MousePosition.x, MousePosition.y + (Mathf.Abs(MousePosition.y - PlayerObject.transform.position.y)/Distance), -10);
+                transform.position = new Vector3(MousePosition.x, MousePosition.y + (Mathf.Abs(MousePosition.y - PlayerObject.transform.position.y)/DistanceRatio), -10);
             }
             else if (MousePosition.y == PlayerObject.transform.position.y)
             {
@@ -62,6 +65,6 @@ public class CameraMovementScript : MonoBehaviour
     void SetPosition()
     {
         // Setting the camera's position.
-         transform.position = new Vector3(XPosition, ((MousePosition.y - PlayerObject.transform.position.y) / (MousePosition.x - PlayerObject.transform.position.x)) * (XPosition - PlayerObject.transform.position.x) + PlayerObject.transform.position.y, -10);
+        transform.position = new Vector3(XPosition, ((MousePosition.y - PlayerObject.transform.position.y) / (MousePosition.x - PlayerObject.transform.position.x)) * (XPosition - PlayerObject.transform.position.x) + PlayerObject.transform.position.y, -10);
     }
 }

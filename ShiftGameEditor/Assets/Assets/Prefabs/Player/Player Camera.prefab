@@ -150,5 +150,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 020c4e52073b56f43bc04b7b2a2ec661, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMovementScript
-  PlayerObject: {fileID: 6565500934132256707, guid: 52d5e59f67f907649ae744781e84b7f7, type: 3}
-  Distance: 3
+  CursorSprite: {fileID: 2800000, guid: 0c1272f33fcb69e49a34468fe7027115, type: 3}
+  DistanceRatio: 3

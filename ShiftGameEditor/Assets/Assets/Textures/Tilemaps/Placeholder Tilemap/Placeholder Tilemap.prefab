@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4140297531104032805}
   - component: {fileID: 2219509076400262677}
   m_Layer: 0
-  m_Name: New Tile Palette
+  m_Name: Placeholder Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

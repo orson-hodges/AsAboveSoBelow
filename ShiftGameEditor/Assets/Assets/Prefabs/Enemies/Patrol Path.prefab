@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6414123653144620975}
   - component: {fileID: 358342844231557853}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Patrol Point
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

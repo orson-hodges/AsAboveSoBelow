@@ -16,7 +16,7 @@ public class CameraMovementScript : MonoBehaviour
     void Start()
     {
         PlayerCamera = Camera.main;
-        PlayerObject = GameObject.Find("Player");
+        PlayerObject = GameObject.FindWithTag("Player");
     }
 
     void FixedUpdate()
@@ -54,9 +54,9 @@ public class CameraMovementScript : MonoBehaviour
         }
 
         // Rolating the player to always face the position of the camera. Note that it is adding 90 instead of substracting, as the "front" of the player is techanically the botton of its sprite.
-        float CameraAngleRadis = Mathf.Atan2(MousePosition.y - PlayerObject.transform.position.y, MousePosition.x - PlayerObject.transform.position.x);
-        float CameraAngleDegree = (180 / Mathf.PI) * CameraAngleRadis + 90;
-        PlayerObject.transform.rotation = Quaternion.Euler(0, 0, CameraAngleDegree);
+        float CameraAngleRadii = Mathf.Atan2(MousePosition.y - PlayerObject.transform.position.y, MousePosition.x - PlayerObject.transform.position.x);
+        float CameraAngleDegrees = (180 / Mathf.PI) * CameraAngleRadii + 90;
+        PlayerObject.transform.eulerAngles = new Vector3(0, 0, CameraAngleDegrees);
     }
 
     void SetPosition()

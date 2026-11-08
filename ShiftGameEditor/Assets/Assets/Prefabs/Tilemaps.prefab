@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3112722231146123791}
   - component: {fileID: 2374498346509396689}
   - component: {fileID: 8006041976955276811}
+  - component: {fileID: 7122515518296708789}
   m_Layer: 0
   m_Name: Wall Placement Tilemap
   m_TagString: Untagged
@@ -184,38 +185,22 @@ MonoBehaviour:
   SpriteTilemap: {fileID: 0}
   TilemapWidth: 100
   TilemapHeight: 100
-  TileSet0:
-  - {fileID: 0}
-  TileSet1:
-  - {fileID: 0}
-  TileSet2:
-  - {fileID: 0}
-  TileSet3:
-  - {fileID: 0}
-  TileSet4:
-  - {fileID: 0}
-  TileSet5:
-  - {fileID: 0}
-  TileSet6:
-  - {fileID: 0}
-  TileSet7:
-  - {fileID: 0}
-  TileSet8:
-  - {fileID: 0}
-  TileSet9:
-  - {fileID: 0}
-  TileSet10:
-  - {fileID: 0}
-  TileSet11:
-  - {fileID: 0}
-  TileSet12:
-  - {fileID: 0}
-  TileSet13:
-  - {fileID: 0}
-  TileSet14:
-  - {fileID: 0}
-  TileSet15:
-  - {fileID: 0}
+  Tile0Set: []
+  Tile1Set: []
+  Tile2Set: []
+  Tile3Set: []
+  Tile4Set: []
+  Tile5Set: []
+  Tile6Set: []
+  Tile7Set: []
+  Tile8Set: []
+  Tile9Set: []
+  Tile10Set: []
+  Tile11Set: []
+  Tile12Set: []
+  Tile13Set: []
+  Tile14Set: []
+  Tile15Set: []
 --- !u!19719996 &3112722231146123791
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -328,6 +313,22 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 658333768985481463}
+--- !u!114 &7122515518296708789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658333768985481463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffffi
 --- !u!1 &2506282542059965275
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,6 +495,7 @@ GameObject:
   - component: {fileID: 1263719515022075923}
   - component: {fileID: 8402801434456260956}
   - component: {fileID: 2750595702212263633}
+  - component: {fileID: 4857335862946920997}
   m_Layer: 0
   m_Name: Floor Tilemap
   m_TagString: Untagged
@@ -644,6 +646,22 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
+--- !u!114 &4857335862946920997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3610302598410232439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9809bf1345abc5648af68b3a82653f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NavMeshPlus::NavMeshPlus.Components.NavMeshModifier
+  m_OverrideArea: 0
+  m_Area: 0
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffffi
 --- !u!1 &5733574890020807599
 GameObject:
   m_ObjectHideFlags: 0

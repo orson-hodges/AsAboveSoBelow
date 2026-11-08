@@ -13,7 +13,7 @@ public class PlayerMovementScript : MonoBehaviour
         PlayerBody = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         PlayerBody.linearVelocity = InputDirection * MovementSpeed;
     }

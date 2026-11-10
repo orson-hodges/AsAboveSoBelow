@@ -20,6 +20,8 @@ public class CameraMovementScript : MonoBehaviour
 
         Cursor.SetCursor(CursorSprite, new Vector2(50, 50), CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Confined;
+
+        transform.position = PlayerObject.transform.position;
     }
 
     void FixedUpdate()

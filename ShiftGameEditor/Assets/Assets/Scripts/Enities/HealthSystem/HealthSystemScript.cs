@@ -35,7 +35,7 @@ public class HealthSystemScript : MonoBehaviour
             {
                 Debug.Log("Enemy is Dead");
                 NormalEnemyBehaviourScript NormalEnemyScript = gameObject.GetComponent<NormalEnemyBehaviourScript>();
-                NormalEnemyScript.CurrentState = NormalEnemyBehaviourScript.State.Dying;
+                NormalEnemyScript.CurrentState = NormalEnemyBehaviourScript.EnemyState.Dying;
             }
             else
             {

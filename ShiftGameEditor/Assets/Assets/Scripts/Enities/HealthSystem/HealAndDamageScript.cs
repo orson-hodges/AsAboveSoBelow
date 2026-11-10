@@ -4,9 +4,14 @@ public class HealAndDamageScript : MonoBehaviour
 {
     public int HealthPointChange;
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        HealthSystemScript HealthScript = collision.GetComponent<HealthSystemScript>();
+        HealthSystemScript HealthScript = collider.gameObject.GetComponent<HealthSystemScript>();
+
+        if (HealthScript == null)
+        {
+            return;
+        }
 
         if (HealthPointChange > 0)
         {

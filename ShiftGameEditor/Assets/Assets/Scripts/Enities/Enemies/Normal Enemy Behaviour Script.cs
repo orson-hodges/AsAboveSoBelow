@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,29 +7,43 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 {
     public float WalkingSpeed;
     public float RunningSpeed;
+    public float IdleRotationDuration;
+    public float PatrollingRotationDuration;
+    public float InvestigatingRotationDuration;
+    
+    public float InvestigatingDistance;
+    public float InvestigatingDuration;
+
+    private bool Unaware;
+
+    private Vector2 OriginalPosition;
+    private Vector3 SoundSourcePosition;
 
     private NavMeshAgent NavigationMechAgent;
     private GameObject PlayerObject;
-    [SerializeField] private GameObject FieldofVisionObject;
+    public GameObject FieldOfVisionObject;
 
-    public bool RolatingIdlePositions;
-    public float[] AngleOfIdlePositionArray;
-    public float[] DurationOfIdlePositionArray;
+    public bool IdleRotating;
+    public float[] AngleOfIdleRotationArray;
+    public float[] DurationOfIdleRotationArray;
+    private int CurrentIdleRotation;
 
-    private int CurrentIdlePosition;
     private Vector3 CurrentAngle;
+    private float AngleChange;
 
     private int UpdateTicker;
-    public int LineOfSightUpdatePeriod;
+    public int LineOfSightUpdateTickRate;
 
     private float IdleTimer;
+    private float InvestigatingTimer;
     private float RotationTimer;
     private float RotationDuration;
 
     public GameObject[] PatrolPath;
-    private int CurrentPartolPoint;
+    private int CurrentPatrolPoint;
 
     public State CurrentState;
+    private State DefaultState;
 
     void Start()
     {
@@ -38,30 +54,30 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
         PlayerObject = GameObject.FindWithTag("Player");
 
-        if (CurrentState == State.Idling)
-        {
-            RotationDuration = 6;
-        }
-        else if (CurrentState == State.Patroling)
-        {
-            RotationDuration = 0.3f;
-        }
+        SetRotationDuration();
+        DefaultState = CurrentState;
+        OriginalPosition = transform.position;
+
+        Unaware = true;
 
         RotationTimer = 0;
         IdleTimer = 0;
         
-        CurrentPartolPoint = 0;
-        CurrentIdlePosition = 0;
+        CurrentPatrolPoint = 0;
+        CurrentIdleRotation = 0;
 
         CurrentAngle = transform.eulerAngles;
+
+        AngleChange = 0;
     }
 
     void FixedUpdate()
     {   
         UpdateTicker += 1;
 
-        RotationTimer += Time.fixedDeltaTime;
         IdleTimer += Time.fixedDeltaTime;
+        InvestigatingTimer += Time.fixedDeltaTime;
+        RotationTimer += Time.fixedDeltaTime;
 
         switch (CurrentState)
         {
@@ -70,14 +86,24 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
                 IdlingUpdate();
                 break;
 
-            case State.Patroling:
+            case State.Patrolling:
 
-                PatrolingUpdate();
+                PatrollingUpdate();
+                break;
+            
+            case State.MovingToInvestigate:
+
+                MovingToInvestigateUpdate();
                 break;
 
             case State.Investigating:
 
                 InvestigatingUpdate();
+                break;
+
+            case State.Returning:
+
+                ReturningUpdate();
                 break;
 
             case State.Chasing:
@@ -109,24 +135,20 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void IdlingUpdate()
     {
-        if (RolatingIdlePositions == true)
+        if (IdleRotating == true)
         {
-            float AngleOfIdlePosition = AngleOfIdlePositionArray[CurrentIdlePosition];
-            float RotationPercentage = (RotationTimer/RotationDuration)/(Mathf.Abs(Mathf.DeltaAngle(CurrentAngle.z, AngleOfIdlePosition))/360);
+            float AngleOfIdlePosition = AngleOfIdleRotationArray[CurrentIdleRotation];        
+            Rotate(CurrentAngle, AngleOfIdlePosition, RotationTimer/RotationDuration);
 
-            transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(CurrentAngle.z, AngleOfIdlePosition, RotationPercentage));
-
-            float AngularDistanceToIdlePosition = Mathf.DeltaAngle(transform.eulerAngles.z, AngleOfIdlePosition);
-
-            if (Mathf.Abs(AngularDistanceToIdlePosition) < 0.01)
+            if (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.z, AngleOfIdlePosition)) < 0.01)
             {
-                if (IdleTimer > DurationOfIdlePositionArray[CurrentIdlePosition])
+                if (IdleTimer > DurationOfIdleRotationArray[CurrentIdleRotation])
                 {
-                    CurrentIdlePosition += 1;
+                    CurrentIdleRotation += 1;
 
-                    if(CurrentIdlePosition == AngleOfIdlePositionArray.Length)
+                    if(CurrentIdleRotation == AngleOfIdleRotationArray.Length)
                     {
-                        CurrentIdlePosition = 0;
+                        CurrentIdleRotation = 0;
                     }
 
                     CurrentAngle = transform.eulerAngles;
@@ -142,23 +164,90 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         }
     }
 
-    void PatrolingUpdate()
+    void PatrollingUpdate()
     {
-        LookingTowardsObject(CurrentAngle, PatrolPath[CurrentPartolPoint].transform.position, RotationTimer/RotationDuration);
+        LookTowardsObject(CurrentAngle, PatrolPath[CurrentPatrolPoint].transform.position, RotationTimer/RotationDuration);
 
-        transform.position = Vector2.MoveTowards(transform.position, PatrolPath[CurrentPartolPoint].transform.position, WalkingSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, PatrolPath[CurrentPatrolPoint].transform.position, WalkingSpeed * Time.deltaTime);
+    }
+
+    void MovingToInvestigateUpdate()
+    {
+        LookTowardsObject(transform.eulerAngles, NavigationMechAgent.steeringTarget, 0.05f);
+
+        if (UpdateTicker % LineOfSightUpdateTickRate == 0)
+        {   
+            if (NavigationMechAgent.remainingDistance < InvestigatingDistance)
+            {
+                RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position, SoundSourcePosition - transform.position, Vector2.Distance(transform.position, SoundSourcePosition));
+
+                if (RaycastResult.collider == null)
+                {
+                    NavigationMechAgent.ResetPath();
+
+                    RotationTimer = 0;
+                    CurrentAngle = transform.eulerAngles;
+
+                    InvestigatingTimer = 0;
+                    CurrentState = State.Investigating;
+                    SetRotationDuration();
+                }  
+            }
+        }
+        
     }
 
     void InvestigatingUpdate()
     {
-        
+        float SoundSourceAngleInRadii = Mathf.Atan2(SoundSourcePosition.y - transform.position.y, SoundSourcePosition.x - transform.position.x);
+        float SoundSourceAngleInDegrees = (180 / Mathf.PI) * SoundSourceAngleInRadii + 90;
+        float FacingAngle = SoundSourceAngleInDegrees + AngleChange;
+
+        Rotate(CurrentAngle, FacingAngle, RotationTimer/RotationDuration);
+
+        if (Mathf.Abs(Mathf.DeltaAngle(transform.eulerAngles.z, FacingAngle)) < 0.01)
+        {
+            CurrentAngle = transform.eulerAngles;
+
+            if (SoundSourceAngleInDegrees < FacingAngle)
+            {
+                AngleChange = -60;
+            }
+            else if (SoundSourceAngleInDegrees >= FacingAngle)
+            {
+                AngleChange = +60;
+            }
+            
+            RotationTimer = 0;
+        }
+
+        if (InvestigatingTimer > InvestigatingDuration)
+        {
+            NavigationMechAgent.SetDestination(OriginalPosition);
+
+            CurrentState = State.Returning;
+        }
+    }
+
+    void ReturningUpdate()
+    {
+        LookTowardsObject(transform.eulerAngles, NavigationMechAgent.steeringTarget, 0.05f);
+
+        if (NavigationMechAgent.remainingDistance < 0.01)
+        {   
+            IdleTimer = 0;
+
+            NavigationMechAgent.ResetPath();
+            CurrentState = DefaultState;
+            SetRotationDuration();
+        }
     }
 
     void ChasingUpdate()
     {
         NavigationMechAgent.SetDestination(PlayerObject.transform.position);
 
-        LookingTowardsObject(transform.eulerAngles, NavigationMechAgent.steeringTarget, 0.5f);
+        LookTowardsObject(transform.eulerAngles, NavigationMechAgent.steeringTarget, 0.05f);
     }
 
     void AttackingRangedUpdate()
@@ -181,38 +270,55 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         
     }
 
-    void LookingTowardsObject(Vector3 currentangle, Vector2 targetobjectposition,  float interpolation)
+    void LookTowardsObject(Vector3 currentangle, Vector2 targetobjectposition,  float interpolation)
     {
-        float PatrolAngleRadii = Mathf.Atan2(targetobjectposition.y - transform.position.y, targetobjectposition.x - transform.position.x);
-        float PatrolAngleDegrees = (180 / Mathf.PI) * PatrolAngleRadii + 90;
+        float TargetObjectAngleInRadii = Mathf.Atan2(targetobjectposition.y - transform.position.y, targetobjectposition.x - transform.position.x);
+        float TargetObjectAngleInDegrees = (180 / Mathf.PI) * TargetObjectAngleInRadii + 90;
 
-        transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(currentangle.z, PatrolAngleDegrees, interpolation));
-        
+        transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(currentangle.z, TargetObjectAngleInDegrees, interpolation/(Mathf.Abs(Mathf.DeltaAngle(CurrentAngle.z, TargetObjectAngleInDegrees))/360)));     
+    }
+
+    void Rotate(Vector3 currentangle, float targetangle, float interpolation)
+    {
+        transform.eulerAngles = new Vector3(0, 0, Mathf.LerpAngle(currentangle.z, targetangle, interpolation/(Mathf.Abs(Mathf.DeltaAngle(CurrentAngle.z, targetangle))/360)));
+    }
+
+    void SetRotationDuration()
+    {
+        if (CurrentState == State.Idling)
+        {
+            RotationDuration = IdleRotationDuration;
+        }
+        else if (CurrentState == State.Patrolling)
+        {
+            RotationDuration = PatrollingRotationDuration;
+        }
+        else if (CurrentState == State.Investigating)
+        {
+            RotationDuration = InvestigatingRotationDuration;
+        }
     }
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        if (collider.gameObject == PatrolPath[CurrentPartolPoint])
+        if (collider.gameObject == PatrolPath[CurrentPatrolPoint])
         {
-            float DistanceToPartolPoint = Vector2.Distance(transform.position, PatrolPath[CurrentPartolPoint].transform.position);
-
-            if (DistanceToPartolPoint < 0.01)
+            if (Vector2.Distance(transform.position, PatrolPath[CurrentPatrolPoint].transform.position) < 0.01)
             {
-                CurrentPartolPoint += 1;
+                CurrentPatrolPoint += 1;
 
-                if (CurrentPartolPoint == PatrolPath.Length)
+                if (CurrentPatrolPoint == PatrolPath.Length)
                 {
-                    CurrentPartolPoint = 0;
+                    CurrentPatrolPoint = 0;
                 }
             }
 
             CurrentAngle = transform.eulerAngles;
 
             RotationTimer = 0;
-            return;
         }
         
-        if (UpdateTicker % LineOfSightUpdatePeriod == 0)
+        if (UpdateTicker % LineOfSightUpdateTickRate == 0)
         {
             if (collider.gameObject == PlayerObject)
             {
@@ -220,9 +326,32 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
                 if (RaycastResult.collider == PlayerObject.GetComponent<Collider2D>())
                 {
+                    Unaware = false;
+                    NavigationMechAgent.isStopped = false;
+                    NavigationMechAgent.speed = RunningSpeed;
+                    FieldOfVisionObject.SetActive(false);
                     CurrentState = State.Chasing;
-                    FieldofVisionObject.SetActive(false);
                 }
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.CompareTag("Sound Source"))
+        {;
+            if (Unaware == true)
+            {
+                NavigationMechAgent.isStopped = false;
+                SoundSourcePosition = collider.gameObject.transform.position;
+                NavigationMechAgent.SetDestination(SoundSourcePosition);
+                
+                if (CurrentState == DefaultState)
+                {
+                    OriginalPosition = transform.position;
+                }
+
+                CurrentState = State.MovingToInvestigate;
             }
         }
     }
@@ -230,8 +359,10 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     public enum State
     {
         Idling,
-        Patroling,
+        Patrolling,
+        MovingToInvestigate,
         Investigating,
+        Returning,
         Chasing,
         AttackingRanged,
         AttackingMelee,

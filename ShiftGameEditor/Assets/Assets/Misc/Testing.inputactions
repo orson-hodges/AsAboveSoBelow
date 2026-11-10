@@ -51,6 +51,35 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "SoundTest",
+            "id": "cede5353-7ae1-40f9-a61d-93a7994410e7",
+            "actions": [
+                {
+                    "name": "Spawn Sound Radis",
+                    "type": "Button",
+                    "id": "b8003106-c0bf-45c0-abab-878b7f9cd443",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6b2b6f5b-b47c-4109-8313-ca7e20185467",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Spawn Sound Radis",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

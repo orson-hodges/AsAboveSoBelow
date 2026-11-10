@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 8010821207915602311}
   m_Layer: 2
   m_Name: Normal Enemy
-  m_TagString: Enemy
+  m_TagString: Normal Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -261,7 +261,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 0.00001
+  m_Height: 1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 0
@@ -279,12 +279,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NormalEnemyBehaviourScript
   WalkingSpeed: 4
   RunningSpeed: 6
-  FieldofVisionObject: {fileID: 3774938885921604685}
-  RolatingIdlePositions: 0
-  AngleOfIdlePositionArray: []
-  DurationOfIdlePositionArray: []
-  LineOfSightUpdatePeriod: 10
-  PatrolPath: []
+  IdleRotationDuration: 6
+  PatrolingRotationDuration: 0.3
+  InvestigatingRotationDuration: 3
+  InvestigatingDistance: 2
+  InvestigatingDuration: 5
+  FieldOfVisionObject: {fileID: 3774938885921604685}
+  IdleRotating: 0
+  AngleOfIdleRotationArray: []
+  DurationOfIdleRotationArray: []
+  LineOfSightUpdateTickRate: 10
+  PatrolPath:
+  - {fileID: 0}
   CurrentState: 0
 --- !u!114 &8010821207915602311
 MonoBehaviour:
@@ -300,5 +306,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystemScript
   CurrentHealthPoints: 80
   MaximumHealthPoints: 80
-  NormalEnemyScript: {fileID: 8503777575472974578}
-  PlayerScript: {fileID: 0}

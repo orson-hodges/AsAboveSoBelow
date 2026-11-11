@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2172777850847110848}
   - component: {fileID: 2973271408528452071}
   - component: {fileID: 4375290796967748726}
-  - component: {fileID: 3457054505378883818}
+  - component: {fileID: -8590219042140649746}
   - component: {fileID: -3222071317034355700}
-  - component: {fileID: -5852136031661359587}
+  - component: {fileID: 3457054505378883818}
   m_Layer: 2
   m_Name: Projectile
   m_TagString: Untagged
@@ -132,33 +132,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &3457054505378883818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474719714268018455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15a4ac8c5dc759142a4fb959c1a49cc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectileLogicScript
-  ProjectileSpeed: 3
---- !u!114 &-3222071317034355700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474719714268018455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44c8d93d6adf51d429cffde1008a9fce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealAndDamageScript
-  HealthPointChange: -20
---- !u!50 &-5852136031661359587
+--- !u!50 &-8590219042140649746
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -185,3 +159,30 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &-3222071317034355700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474719714268018455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c8d93d6adf51d429cffde1008a9fce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealAndDamageScript
+  HealthPointChange: -20
+  ContinuousContact: 0
+--- !u!114 &3457054505378883818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474719714268018455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a4ac8c5dc759142a4fb959c1a49cc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileLogicScript
+  ProjectileSpeed: 3

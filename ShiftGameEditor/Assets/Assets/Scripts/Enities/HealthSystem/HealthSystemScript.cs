@@ -38,7 +38,7 @@ public class HealthSystemScript : MonoBehaviour
     }
 
     // Damages the object by damagevalue if they aren't currently invincible. If the health points of the object reaches 0 or below, the object's death function is called.
-    public void Hurt(int damagevalue)
+    public void Hurt(int damagevalue, Vector2 damagesourceposition)
     {
         // Checks if the object is invincible before dealing damage. If they are, then no damage is applied.
         if (InvincibilityTimer > InvincibilityDuration)
@@ -58,10 +58,11 @@ public class HealthSystemScript : MonoBehaviour
                     PlayerMovementScript PlayerScript = gameObject.GetComponent<PlayerMovementScript>();
                     PlayerScript.Die();
                 }
-                else if (gameObject.tag == "Enemy")
+                else if (gameObject.tag == "Normal Enemy")
                 {
                     Debug.Log("Enemy is Dead");
                     NormalEnemyBehaviourScript NormalEnemyScript = gameObject.GetComponent<NormalEnemyBehaviourScript>();
+                    NormalEnemyScript.DeathTargetPosition = damagesourceposition;
                     NormalEnemyScript.CurrentEnemyState = NormalEnemyBehaviourScript.EnemyState.Dying;
                 }
                 else

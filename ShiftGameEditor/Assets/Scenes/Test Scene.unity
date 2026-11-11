@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 253275359}
   - component: {fileID: 253275361}
   - component: {fileID: 253275362}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Hurt Box (20, Continuous)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 1689913277}
   - component: {fileID: 1689913276}
   - component: {fileID: 1689913275}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Heal Box (100, One Time)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -644,7 +644,7 @@ GameObject:
   - component: {fileID: 1730453573}
   - component: {fileID: 1730453572}
   - component: {fileID: 1730453571}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Hurt Box (50, One Time)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -798,7 +798,7 @@ GameObject:
   - component: {fileID: 1823242235}
   - component: {fileID: 1823242237}
   - component: {fileID: 1823242238}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Heal Box (2, Continuous)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1227,6 +1227,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 107272091765609009, guid: f7b02ee6275cc6d4686a066416c89195, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3284128283203608543, guid: f7b02ee6275cc6d4686a066416c89195, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3821028714715449081, guid: f7b02ee6275cc6d4686a066416c89195, type: 3}

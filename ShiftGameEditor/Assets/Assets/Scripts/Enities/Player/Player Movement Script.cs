@@ -7,6 +7,11 @@ public class PlayerMovementScript : MonoBehaviour
     private Rigidbody2D PlayerBody;
     protected Vector2 InputDirection;
 
+    public float RangedAttackFireRate;
+    private float RangedAttackCooldownTimer;
+
+    public GameObject PlayerProjectilePrefab;
+
     public InputActionAsset InputMap;
     private InputAction RangedAttackAction;
     private InputAction ShiftAction;
@@ -19,6 +24,8 @@ public class PlayerMovementScript : MonoBehaviour
         RangedAttackAction = InputMap.FindAction("Ranged Attack");
         ShiftAction = InputMap.FindAction("Shift");
         LookIntoShiftAction = InputMap.FindAction("Look Into Shift");
+
+        RangedAttackCooldownTimer = RangedAttackFireRate;
     }
 
     void FixedUpdate()
@@ -28,9 +35,15 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
+        RangedAttackCooldownTimer += Time.deltaTime;
+
         if (RangedAttackAction.IsPressed())
         {
-            Debug.Log("Ranged Attack");
+            if (RangedAttackCooldownTimer > RangedAttackFireRate)
+            {
+                Instantiate(PlayerProjectilePrefab, transform.position, transform.rotation);
+                RangedAttackCooldownTimer = 0;
+            }
         }
 
         if (ShiftAction.IsPressed())

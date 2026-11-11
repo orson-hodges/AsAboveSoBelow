@@ -27,7 +27,7 @@ public class HealAndDamageScript : MonoBehaviour
         }
         else if (HealthPointChange < 0)
         {
-            HealthScript.Hurt(HealthPointChange);
+            HealthScript.Hurt(HealthPointChange, transform.position);
         }
         else if (HealthPointChange == 0)
         {

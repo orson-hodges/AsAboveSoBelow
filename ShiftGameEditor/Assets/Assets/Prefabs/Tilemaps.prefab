@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2374498346509396689}
   - component: {fileID: 8006041976955276811}
   - component: {fileID: 7122515518296708789}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall Placement Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

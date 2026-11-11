@@ -203,6 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovementScript
   MovementSpeed: 10
+  RangedAttackFireRate: 1
+  PlayerProjectilePrefab: {fileID: 5046545370783973822, guid: d100cf0d6eebc7e428b67b7266705f95, type: 3}
   InputMap: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!114 &3956274758410605833
 MonoBehaviour:

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,6 +30,11 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     public float InvestigatingDuration;
 
     private bool UnawareOfPlayerPosition;
+    private bool Alive;
+
+    [NonSerialized] public Vector3 DeathTargetPosition;
+
+    private Rigidbody2D EnemyBody;
 
     private int[] StrafeDirection;
     private int StrafeDirectionIndex;
@@ -91,6 +97,9 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         MeleeAttackHitbox.SetActive(false);
 
         UnawareOfPlayerPosition = true;
+        Alive = true;
+
+        EnemyBody = gameObject.GetComponent<Rigidbody2D>();
 
         StrafeDirection = new int[]
         {
@@ -315,7 +324,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         {
             StrafeDurationTimer = 0;
             StrafeDirectionIndex = StrafeDirectionIndex * -1;
-            StrafeDuration = Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
+            StrafeDuration = UnityEngine.Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
         }
 
         if (UpdateTicker % UpdateTickRate == 0)
@@ -327,7 +336,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             if (RaycastResult.collider != null || CircleCastResult.collider != PlayerObject.gameObject.GetComponent<Collider2D>())
             {
                 StrafeDirectionIndex = StrafeDirectionIndex * -1;
-                StrafeDuration = Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
+                StrafeDuration = UnityEngine.Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
             }
         }
 
@@ -336,7 +345,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         if (RangedAttackCooldownTimer > RangedAttackFireRate)
         {
             Vector3 ProjectileRotation = transform.eulerAngles;
-            ProjectileRotation.z += Random.Range(-RangedAttackSpread, RangedAttackSpread);
+            ProjectileRotation.z += UnityEngine.Random.Range(-RangedAttackSpread, RangedAttackSpread);
             
             Instantiate(ProjectilePrefab, transform.position, Quaternion.Euler(ProjectileRotation));
 
@@ -357,7 +366,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         }
         else if (MeleeAttackPauseTimer > MeleeAttackPauseDuration)
         {
-            gameObject.GetComponent<Rigidbody2D>().linearVelocity = (new Vector2(-transform.up.x, -transform.up.y)) * MeleeAttackMovementSpeed;
+            EnemyBody.linearVelocity = (new Vector2(-transform.up.x, -transform.up.y)) * MeleeAttackMovementSpeed;
 
             MeleeAttackHitbox.SetActive(true);
 
@@ -368,7 +377,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
                 MeleeAttackHitbox.SetActive(false);
                 MeleeAttackCooldownTimer = 0;
 
-                gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                EnemyBody.linearVelocity = Vector2.zero;
             }
         }
     }
@@ -380,7 +389,20 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void DyingUpdate()
     {
-        
+        if (Alive == true)
+        {
+            Debug.Log("He is dead :O");
+            Alive = false;
+
+            Vector2 StoredPosition = transform.eulerAngles;
+            LookTowardsObject(transform.eulerAngles, DeathTargetPosition, 1);
+            DeathTargetPosition += transform.up * 10;
+            transform.eulerAngles = StoredPosition;
+            gameObject.GetComponent<Collider2D>().excludeLayers = LayerMask.GetMask("Player", "Ignore Raycast", "Default");
+            FieldOfVisionObject.SetActive(false);
+        }
+
+        EnemyBody.position = Vector2.Lerp(transform.position, DeathTargetPosition, 0.5f);
     }
 
     void LookTowardsObject(Vector3 currentangle, Vector2 targetobjectposition,  float interpolation)
@@ -451,8 +473,8 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
                     RangedAttackCooldownTimer = 0;
 
                     StrafeDurationTimer = 0;
-                    StrafeDirectionIndex = StrafeDirection[Random.Range(0, 1)];
-                    StrafeDuration = Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
+                    StrafeDirectionIndex = StrafeDirection[UnityEngine.Random.Range(0, 1)];
+                    StrafeDuration = UnityEngine.Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
                 }
 
                 CurrentEnemyState = EnemyState.AttackingRanged;
@@ -525,7 +547,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     {
         if (collision.gameObject == PlayerObject)
         {
-            gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            EnemyBody.linearVelocity = Vector2.zero;
         }
     }
     public enum EnemyState

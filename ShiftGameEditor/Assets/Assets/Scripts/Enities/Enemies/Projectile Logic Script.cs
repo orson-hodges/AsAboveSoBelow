@@ -11,7 +11,7 @@ public class ProjectileLogicScript : MonoBehaviour
         transform.position -= transform.up * ProjectileSpeed * Time.fixedDeltaTime;
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerStay2D(Collider2D collider)
     {
         // Destroys the projectile on collision with the player or the environment.
         Destroy(gameObject);

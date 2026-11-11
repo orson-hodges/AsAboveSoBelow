@@ -17,6 +17,7 @@ public class DuelTilemapSystemScript : MonoBehaviour
 
     // Tilemap used to determine the sprites of the sprite tilemap.
     public Tilemap PlacementTilemap;
+
     // The visual tilemap with all the sprites.
     public Tilemap SpriteTilemap; 
 
@@ -42,11 +43,14 @@ public class DuelTilemapSystemScript : MonoBehaviour
     public Tile[] Tile14Set;
     public Tile[] Tile15Set;
 
+    // The dictionary used to store the rules for tiles.
     private Dictionary<Tuple<TileType, TileType, TileType, TileType>, Tile[]> TileRules;
 
     void Start()
     {
-        // TileRules is used to determine which tile sprite to use depending on the neighouring placement tile types.
+        // TileRules is used to determine which tile sprite set to use depending on the neighouring placement tile types.
+        // (1, 2, 3, 4) = [1][2]
+        //                [3][4]
         TileRules = new()
         {
             {new (Empty, Empty, Empty, Empty), Tile0Set}, // Empty Tile

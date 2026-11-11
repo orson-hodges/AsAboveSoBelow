@@ -18,10 +18,10 @@ public class test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Click.WasCompletedThisFrame())
+        if (Click.WasPressedThisFrame())
         {
             Vector2 MousePosition = PlayerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            float Radis = 20;
+            float Radis = 5;
 
             SoundScript.SpawnSoundSource(Radis, MousePosition);
         }

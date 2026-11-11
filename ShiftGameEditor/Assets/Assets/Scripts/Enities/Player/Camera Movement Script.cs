@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +10,8 @@ public class CameraMovementScript : MonoBehaviour
     public Texture2D CursorSprite;
     
     // Where the camera is suppose to be at the X axis. 
-    protected float XPosition;
+    protected float CameraXPosition;
+
     // How far along the "line" between the player and the mouse the camera will be. Acts as a divider (2 is the exact midpoint, 3 is 1/3th along from the player, etc).
     public float DistanceRatio;  
 
@@ -18,26 +20,26 @@ public class CameraMovementScript : MonoBehaviour
         PlayerCamera = Camera.main;
         PlayerObject = GameObject.FindWithTag("Player");
 
+        // Setting the cursor to the custom cursor sprite and confining it to the game space so it cannot leave the window.
         Cursor.SetCursor(CursorSprite, new Vector2(50, 50), CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Confined;
-
-        transform.position = PlayerObject.transform.position;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         // Getting the position for the camera to be, which is a point between the player and the mouse, determined by the "DistanceRatio" variable.
         // Checking if the X axis of the mouse is larger or smaller to the X axis of the player, as this changes the maths needed for the camera's X axis. The camera's Y axis' formula is the same for both but depends on the camera's X axis.
-        MousePosition = PlayerCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        MousePosition = PlayerCamera.ScreenToWorldPoint(new Vector2(Mathf.Clamp(Mouse.current.position.x.ReadValue(), 0, 800), Mathf.Clamp(Mouse.current.position.y.ReadValue(), 0, 800)));
+
         if (MousePosition.x > PlayerObject.transform.position.x)
         {
-            XPosition = PlayerObject.transform.position.x + Mathf.Abs(PlayerObject.transform.position.x - MousePosition.x)/DistanceRatio;
-            SetPosition();
+            CameraXPosition = PlayerObject.transform.position.x + Mathf.Abs(PlayerObject.transform.position.x - MousePosition.x)/DistanceRatio;
+            SetCameraPosition();
         }
         else if (MousePosition.x < PlayerObject.transform.position.x)
         {
-            XPosition = PlayerObject.transform.position.x - Mathf.Abs(MousePosition.x - PlayerObject.transform.position.x)/DistanceRatio;
-            SetPosition();
+            CameraXPosition = PlayerObject.transform.position.x - Mathf.Abs(MousePosition.x - PlayerObject.transform.position.x)/DistanceRatio;
+            SetCameraPosition();
         }
         else if(MousePosition.x == PlayerObject.transform.position.x)
         {
@@ -64,9 +66,11 @@ public class CameraMovementScript : MonoBehaviour
         PlayerObject.transform.eulerAngles = new Vector3(0, 0, CameraAngleDegrees);
     }
 
-    void SetPosition()
+
+
+    // Sets the camera's position to the target position.
+    void SetCameraPosition()
     {
-        // Setting the camera's position.
-        transform.position = new Vector3(XPosition, ((MousePosition.y - PlayerObject.transform.position.y) / (MousePosition.x - PlayerObject.transform.position.x)) * (XPosition - PlayerObject.transform.position.x) + PlayerObject.transform.position.y, -10);
+        transform.position = new Vector3(CameraXPosition, ((MousePosition.y - PlayerObject.transform.position.y) / (MousePosition.x - PlayerObject.transform.position.x)) * (CameraXPosition - PlayerObject.transform.position.x) + PlayerObject.transform.position.y, -10);
     }
 }

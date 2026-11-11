@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15a4ac8c5dc759142a4fb959c1a49cc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileLogicScript
-  ProjeciteSpeed: 0.1
+  ProjectileSpeed: 3
 --- !u!114 &-3222071317034355700
 MonoBehaviour:
   m_ObjectHideFlags: 0

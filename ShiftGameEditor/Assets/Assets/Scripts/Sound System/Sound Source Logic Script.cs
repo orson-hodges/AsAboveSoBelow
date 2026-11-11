@@ -4,19 +4,20 @@ public class SoundSourceLogicScript : MonoBehaviour
 {
     private SoundSystemScript SoundScript;
 
-    public float Duration;
+    // How long the sound lasts.
+    public float SoundDuration;
 
     void Start()
     {
         SoundScript = GameObject.FindWithTag("Sound Manager").GetComponent<SoundSystemScript>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        Duration -= Time.fixedDeltaTime;
+        SoundDuration -= Time.fixedDeltaTime;
 
-        if (Duration <= 0)
+        // After the duration, the sound source object is despawned by the sound manager.
+        if (SoundDuration <= 0)
         {
             SoundScript.DespawnSoundSource(gameObject);
         }

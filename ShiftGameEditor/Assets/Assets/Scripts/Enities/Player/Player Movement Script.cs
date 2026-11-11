@@ -7,10 +7,18 @@ public class PlayerMovementScript : MonoBehaviour
     private Rigidbody2D PlayerBody;
     protected Vector2 InputDirection;
 
+    public InputActionAsset InputMap;
+    private InputAction RangedAttackAction;
+    private InputAction ShiftAction;
+    private InputAction LookIntoShiftAction;
 
-    void Awake()
+    void Start()
     {
         PlayerBody = gameObject.GetComponent<Rigidbody2D>();
+
+        RangedAttackAction = InputMap.FindAction("Ranged Attack");
+        ShiftAction = InputMap.FindAction("Shift");
+        LookIntoShiftAction = InputMap.FindAction("Look Into Shift");
     }
 
     void FixedUpdate()
@@ -18,13 +26,37 @@ public class PlayerMovementScript : MonoBehaviour
         PlayerBody.linearVelocity = InputDirection * MovementSpeed;
     }
 
+    void Update()
+    {
+        if (RangedAttackAction.IsPressed())
+        {
+            Debug.Log("Ranged Attack");
+        }
+
+        if (ShiftAction.IsPressed())
+        {
+            Debug.Log("Shift");
+        }
+
+        if (LookIntoShiftAction.IsPressed())
+        {
+            Debug.Log("Look Into Shift");
+        }
+    }
+
     public void Die()
     {
         Debug.Log("omg you are so dead rn :O");
     }
 
-    void OnMove(InputValue inputdirectionvalue)
+    void OnMove(InputValue inputvalue)
     {
-        InputDirection = inputdirectionvalue.Get<Vector2>();
+        // Keep track of the player's input direction.
+        InputDirection = inputvalue.Get<Vector2>();
+    }
+
+    void OnMeleeAttack()
+    {
+        
     }
 }

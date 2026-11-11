@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,20 +6,29 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     public float WalkingSpeed;
     public float RunningSpeed;
     public float StrafingSpeed;
+
     public float IdleRotationDuration;
     public float PatrollingRotationDuration;
     public float InvestigatingRotationDuration;
+
     public float RangedAttackRange;
     public float MeleeAttackRange;
+
     public float RangedAttackFireRate;
     public float RangedAttackSpread;
+
     public float StrafeDurationMinimum;
     public float StrafeDurationMaximun;
+
+    public float MeleeAttackPauseDuration;
+    public float MeleeAttackDuration;
+    public float MeleeAttackMovementSpeed;
+    public float MeleeAttackCooldown;
     
     public float InvestigatingDistance;
     public float InvestigatingDuration;
 
-    private bool Unaware;
+    private bool UnawareOfPlayerPosition;
 
     private int[] StrafeDirection;
     private int StrafeDirectionIndex;
@@ -29,9 +37,12 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     private Vector2 OriginalPosition;
     private Vector3 SoundSourcePosition;
 
+    [SerializeField] private GameObject MeleeAttackHitbox;
+    private Vector2 MeleeAttackTargetPosition;
+
     private NavMeshAgent NavigationMechAgent;
     private GameObject PlayerObject;
-    public GameObject FieldOfVisionObject;
+    [SerializeField] private GameObject FieldOfVisionObject;
 
     public bool IdleRotating;
     public float[] AngleOfIdleRotationArray;
@@ -47,20 +58,21 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     public int UpdateTickRate;
 
     public float WallCollisionCheckDistance;
-    public float WallCollisionCheckCooldown;
 
     private float IdleTimer;
     private float InvestigatingTimer;
     private float RangedAttackCooldownTimer;
     private float StrafeDurationTimer;
+    private float MeleeAttackPauseTimer;
+    private float MeleeAttackCooldownTimer;
+    private float MeleeAttackTimer;
     private float RotationTimer;
-    private float WallCollisionCheckTimer;
     private float RotationDuration;
 
     public GameObject[] PatrolPath;
     private int CurrentPatrolPoint;
 
-    public EnemyState CurrentState;
+    public EnemyState CurrentEnemyState;
     private EnemyState DefaultState;
 
     void Start()
@@ -73,10 +85,12 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         PlayerObject = GameObject.FindWithTag("Player");
 
         SetRotationDuration();
-        DefaultState = CurrentState;
+        DefaultState = CurrentEnemyState;
         OriginalPosition = transform.position;
 
-        Unaware = true;
+        MeleeAttackHitbox.SetActive(false);
+
+        UnawareOfPlayerPosition = true;
 
         StrafeDirection = new int[]
         {
@@ -88,7 +102,9 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         InvestigatingTimer = 0;
         RangedAttackCooldownTimer = 0;
         StrafeDurationTimer = 0;
-        WallCollisionCheckTimer = 0;
+        MeleeAttackPauseTimer = MeleeAttackPauseDuration;
+        MeleeAttackCooldownTimer = MeleeAttackCooldown;
+        MeleeAttackTimer = 0;
         RotationTimer = 0;
         
         CurrentPatrolPoint = 0;
@@ -107,10 +123,11 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         InvestigatingTimer += Time.fixedDeltaTime;
         RangedAttackCooldownTimer += Time.fixedDeltaTime;
         StrafeDurationTimer += Time.fixedDeltaTime;
-        WallCollisionCheckTimer += Time.fixedDeltaTime;
+        MeleeAttackPauseTimer += Time.fixedDeltaTime;
+        MeleeAttackCooldownTimer += Time.fixedDeltaTime;
         RotationTimer += Time.fixedDeltaTime;
 
-        switch (CurrentState)
+        switch (CurrentEnemyState)
         {
             case EnemyState.Idling:
 
@@ -218,7 +235,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
                     CurrentAngle = transform.eulerAngles;
 
                     InvestigatingTimer = 0;
-                    CurrentState = EnemyState.Investigating;
+                    CurrentEnemyState = EnemyState.Investigating;
                     SetRotationDuration();
                 }  
             }
@@ -253,7 +270,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         {
             NavigationMechAgent.SetDestination(OriginalPosition);
 
-            CurrentState = EnemyState.Returning;
+            CurrentEnemyState = EnemyState.Returning;
         }
     }
 
@@ -266,7 +283,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             IdleTimer = 0;
 
             NavigationMechAgent.ResetPath();
-            CurrentState = DefaultState;
+            CurrentEnemyState = DefaultState;
             SetRotationDuration();
         }
     }
@@ -292,7 +309,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));
         }
 
-        transform.position += transform.right * StrafeDirectionIndex * StrafingSpeed/50;
+        transform.position += transform.right * StrafeDirectionIndex * StrafingSpeed * Time.fixedDeltaTime;
 
         if (StrafeDurationTimer > StrafeDuration)
         {
@@ -303,19 +320,14 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
         if (UpdateTicker % UpdateTickRate == 0)
         {
-            if (WallCollisionCheckTimer > WallCollisionCheckCooldown)
+
+            RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position + transform.right * WallCollisionCheckDistance, (transform.position - transform.right * WallCollisionCheckDistance * 2) - transform.position, WallCollisionCheckDistance * 2);
+            RaycastHit2D CircleCastResult = Physics2D.CircleCast(transform.position, 1f, PlayerObject.transform.position - transform.position, Vector2.Distance(transform.position, PlayerObject.transform.position));
+
+            if (RaycastResult.collider != null || CircleCastResult.collider != PlayerObject.gameObject.GetComponent<Collider2D>())
             {
-                RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position + transform.right * WallCollisionCheckDistance, (transform.position - transform.right * WallCollisionCheckDistance * 2) - transform.position, WallCollisionCheckDistance * 2);
-                RaycastHit2D CircleCastResult = Physics2D.CircleCast(transform.position, 0.5f, PlayerObject.transform.position - transform.position, Vector2.Distance(transform.position, PlayerObject.transform.position));
-
-                if (RaycastResult.collider != null || CircleCastResult.collider != PlayerObject.gameObject.GetComponent<Collider2D>())
-                {
-                    StrafeDurationTimer = 0;
-                    StrafeDirectionIndex = StrafeDirectionIndex * -1;
-                    StrafeDuration = Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
-
-                    WallCollisionCheckTimer = 0;
-                }
+                StrafeDirectionIndex = StrafeDirectionIndex * -1;
+                StrafeDuration = Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
             }
         }
 
@@ -334,12 +346,31 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void AttackingMeleeUpdate()
     {
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTicker % UpdateTickRate == 0 && MeleeAttackCooldownTimer <= MeleeAttackCooldown)
         {
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));
         }
 
-        LookTowardsObject(transform.eulerAngles, PlayerObject.transform.position, 0.05f);    
+        if (MeleeAttackPauseTimer < MeleeAttackPauseDuration)
+        {
+            LookTowardsObject(transform.eulerAngles, MeleeAttackTargetPosition, 0.05f);
+        }
+        else if (MeleeAttackPauseTimer > MeleeAttackPauseDuration)
+        {
+            gameObject.GetComponent<Rigidbody2D>().linearVelocity = (new Vector2(-transform.up.x, -transform.up.y)) * MeleeAttackMovementSpeed;
+
+            MeleeAttackHitbox.SetActive(true);
+
+            MeleeAttackTimer += Time.fixedDeltaTime;
+
+            if (MeleeAttackTimer > MeleeAttackDuration)
+            {
+                MeleeAttackHitbox.SetActive(false);
+                MeleeAttackCooldownTimer = 0;
+
+                gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
+        }
     }
 
     void SearchingUpdate()
@@ -367,15 +398,15 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void SetRotationDuration()
     {
-        if (CurrentState == EnemyState.Idling)
+        if (CurrentEnemyState == EnemyState.Idling)
         {
             RotationDuration = IdleRotationDuration;
         }
-        else if (CurrentState == EnemyState.Patrolling)
+        else if (CurrentEnemyState == EnemyState.Patrolling)
         {
             RotationDuration = PatrollingRotationDuration;
         }
-        else if (CurrentState == EnemyState.Investigating)
+        else if (CurrentEnemyState == EnemyState.Investigating)
         {
             RotationDuration = InvestigatingRotationDuration;
         }
@@ -389,17 +420,24 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void AttackRangeCheck(float distance)
     {
-        if (distance <= MeleeAttackRange)
+        if (distance <= MeleeAttackRange && MeleeAttackCooldownTimer > MeleeAttackCooldown)
         {
             if (LineOfSightCheck(PlayerObject.transform.position) == PlayerObject.GetComponent<Collider2D>())
             {
                 NavigationMechAgent.ResetPath();
 
-                CurrentState = EnemyState.AttackingMelee;
+                if (CurrentEnemyState != EnemyState.AttackingMelee)
+                {
+                    MeleeAttackPauseTimer = 0;
+                    MeleeAttackTimer = 0;
+                    MeleeAttackTargetPosition = PlayerObject.transform.position;
+                }
+
+                CurrentEnemyState = EnemyState.AttackingMelee;
             }
             else
             {
-                CurrentState = EnemyState.Chasing;
+                CurrentEnemyState = EnemyState.Chasing;
             }
         }
         else if (distance <= RangedAttackRange)
@@ -408,7 +446,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             {
                 NavigationMechAgent.ResetPath();
                 
-                if(CurrentState != EnemyState.AttackingRanged)
+                if(CurrentEnemyState != EnemyState.AttackingRanged)
                 {
                     RangedAttackCooldownTimer = 0;
 
@@ -417,16 +455,16 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
                     StrafeDuration = Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
                 }
 
-                CurrentState = EnemyState.AttackingRanged;
+                CurrentEnemyState = EnemyState.AttackingRanged;
             }
             else
             {
-                CurrentState = EnemyState.Chasing;
+                CurrentEnemyState = EnemyState.Chasing;
             }            
         }
         else
         {
-            CurrentState = EnemyState.Chasing;
+            CurrentEnemyState = EnemyState.Chasing;
         }
     }
 
@@ -451,15 +489,14 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         
         if (UpdateTicker % UpdateTickRate == 0)
         {
-            if (collider.gameObject == PlayerObject)
+            if (collider.gameObject == PlayerObject && UnawareOfPlayerPosition == true)
             {
                 if (LineOfSightCheck(PlayerObject.transform.position) == PlayerObject.GetComponent<Collider2D>())
                 {
-                    Unaware = false;
-                    NavigationMechAgent.isStopped = false;
+                    UnawareOfPlayerPosition = false;
                     NavigationMechAgent.speed = RunningSpeed;
                     FieldOfVisionObject.SetActive(false);
-                    CurrentState = EnemyState.Chasing;
+                    CurrentEnemyState = EnemyState.Chasing;
                 }
             }
         }
@@ -469,22 +506,28 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Sound Source"))
         {;
-            if (Unaware == true)
+            if (UnawareOfPlayerPosition == true)
             {
-                NavigationMechAgent.isStopped = false;
                 SoundSourcePosition = collider.gameObject.transform.position;
                 NavigationMechAgent.SetDestination(SoundSourcePosition);
                 
-                if (CurrentState == DefaultState)
+                if (CurrentEnemyState == DefaultState)
                 {
                     OriginalPosition = transform.position;
                 }
 
-                CurrentState = EnemyState.MovingToInvestigate;
+                CurrentEnemyState = EnemyState.MovingToInvestigate;
             }
         }
     }
 
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject == PlayerObject)
+        {
+            gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        }
+    }
     public enum EnemyState
     {
         Idling,

@@ -38,7 +38,7 @@ public class HealthSystemScript : MonoBehaviour
     }
 
     // Damages the object by damagevalue if they aren't currently invincible. If the health points of the object reaches 0 or below, the object's death function is called.
-    public void Hurt(int damagevalue, Vector2 damagesourceposition)
+    public void Hurt(int damagevalue, Vector2 damagesourceposition, bool continuouscontact)
     {
         // Checks if the object is invincible before dealing damage. If they are, then no damage is applied.
         if (InvincibilityTimer > InvincibilityDuration)
@@ -54,9 +54,27 @@ public class HealthSystemScript : MonoBehaviour
             {
                 if (gameObject.tag == "Player")
                 {
-                    Debug.Log("Player is Dead");
                     PlayerMovementScript PlayerScript = gameObject.GetComponent<PlayerMovementScript>();
-                    PlayerScript.Die();
+                    if (PlayerScript.Alive == true)
+                    {
+                        Debug.Log("Player is Dead");
+                        gameObject.GetComponent<Collider2D>().excludeLayers = LayerMask.GetMask("Player", "Ignore Raycast", "Default");
+
+                        if (continuouscontact == false)
+                        {
+                            PlayerScript.DeathTargetVector = damagesourceposition;
+                            PlayerScript.DeathTargetVector = PlayerScript.DeathTargetVector - new Vector2(transform.position.x, transform.position.y);
+                        }
+                        else
+                        {
+                            PlayerScript.DeathTargetVector = Vector2.zero;
+                        }
+
+                        PlayerScript.PlayerBody.linearVelocity = Vector2.zero;
+                        PlayerScript.PlayerCamera.GetComponent<CameraMovementScript>().enabled = false;
+                        PlayerScript.Alive = false;
+                        PlayerScript.Dying();
+                    }
                 }
                 else if (gameObject.tag == "Normal Enemy")
                 {

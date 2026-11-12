@@ -396,7 +396,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
             Vector2 StoredPosition = transform.eulerAngles;
             LookTowardsObject(transform.eulerAngles, DeathTargetPosition, 1);
-            DeathTargetPosition += transform.up * 10;
+            DeathTargetPosition += transform.up * 1;
             transform.eulerAngles = StoredPosition;
             gameObject.GetComponent<Collider2D>().excludeLayers = LayerMask.GetMask("Player", "Ignore Raycast", "Default");
             FieldOfVisionObject.SetActive(false);

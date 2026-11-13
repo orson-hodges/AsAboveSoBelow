@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7968275479518705408}
   - component: {fileID: 8427169669118579607}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Field of Vision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 2439785933703697280}
   - component: {fileID: 8503777575472974578}
   - component: {fileID: 8010821207915602311}
-  m_Layer: 2
+  m_Layer: 10
   m_Name: Normal Enemy
   m_TagString: Normal Enemy
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -264,8 +264,8 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
+  m_WalkableMask: 16
+  m_ObstacleAvoidanceType: 1
 --- !u!114 &8503777575472974578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 5372348053483271518}
   - component: {fileID: 6955477551976498416}
   - component: {fileID: 6631855660004817918}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Melee Atttack Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

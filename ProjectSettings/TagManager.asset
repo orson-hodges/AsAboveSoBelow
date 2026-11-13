@@ -7,6 +7,9 @@ TagManager:
   - Normal Enemy
   - Sound Source
   - Sound Manager
+  - Above Wall Sprite Tilemap
+  - Above Wall Collision Tilemap
+  - Search Point
   layers:
   - Default
   - TransparentFX
@@ -15,11 +18,11 @@ TagManager:
   - Water
   - UI
   - Player
-  - Wall Collision
-  - 
-  - 
-  - 
-  - 
+  - Above Wall Collision Tilemap
+  - Below Wall Collision Tilemap
+  - Above Enemy
+  - Below Enemy
+  - Player (Above)
   - 
   - 
   - 

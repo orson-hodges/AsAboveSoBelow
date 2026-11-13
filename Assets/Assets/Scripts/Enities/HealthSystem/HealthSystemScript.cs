@@ -70,9 +70,6 @@ public class HealthSystemScript : MonoBehaviour
                             PlayerScript.DeathTargetVector = Vector2.zero;
                         }
 
-                        PlayerScript.PlayerBody.linearVelocity = Vector2.zero;
-                        PlayerScript.PlayerCamera.GetComponent<CameraMovementScript>().enabled = false;
-                        PlayerScript.Alive = false;
                         PlayerScript.Dying();
                     }
                 }

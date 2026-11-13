@@ -18,12 +18,12 @@
                 },
                 {
                     "name": "Ranged Attack",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false,
+                    "initialStateCheck": true,
                     "priority": 0
                 },
                 {
@@ -38,32 +38,22 @@
                 },
                 {
                     "name": "Shift",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false,
+                    "initialStateCheck": true,
                     "priority": 0
                 },
                 {
                     "name": "Look Into Shift",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "f3f2e2dd-7836-443a-9198-f5ddea94d3e7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false,
-                    "priority": 0
-                },
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "eac64348-5b31-456a-bcd1-3d70f102684e",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false,
+                    "initialStateCheck": true,
                     "priority": 0
                 }
             ],

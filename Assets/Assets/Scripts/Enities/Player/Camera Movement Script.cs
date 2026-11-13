@@ -21,7 +21,7 @@ public class CameraMovementScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Gets the camera target position by getting the mouse position in world space, getting the vector to the mouse's position from the player's position, and then dividing by DistanceRatio. Then sets the camera's position to the target position.
         Vector3 MousePosition = PlayerCamera.ScreenToWorldPoint(new Vector2(Mathf.Clamp(Mouse.current.position.x.ReadValue(), 0, 800), Mathf.Clamp(Mouse.current.position.y.ReadValue(), 0, 800)));

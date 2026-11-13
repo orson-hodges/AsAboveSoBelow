@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -55,6 +56,9 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     public float[] DurationOfIdleRotationArray;
     private int CurrentIdleRotation;
 
+    private GameObject[] SearchPoints;
+    private GameObject CurrentSearchPoint;
+
     [SerializeField] private GameObject ProjectilePrefab;
 
     private Vector3 CurrentAngle;
@@ -107,6 +111,8 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             -1
         };
 
+        SearchPoints = GameObject.FindGameObjectsWithTag("Search Point");
+
         IdleTimer = 0;
         InvestigatingTimer = 0;
         RangedAttackCooldownTimer = 0;
@@ -135,6 +141,24 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         MeleeAttackPauseTimer += Time.fixedDeltaTime;
         MeleeAttackCooldownTimer += Time.fixedDeltaTime;
         RotationTimer += Time.fixedDeltaTime;
+    }
+
+    void Update()
+    {
+        PlayerMovementScript PlayerScript = PlayerObject.GetComponent<PlayerMovementScript>();
+
+        if (PlayerScript.ShiftedThisFrame)
+        {
+            if (!UnawareOfPlayerPosition)
+            {
+                FieldOfVisionObject.SetActive(true);
+                UnawareOfPlayerPosition = true;
+                NavigationMechAgent.SetDestination(PlayerObject.transform.position);
+                EnemyBody.linearVelocity = Vector2.zero;
+                MeleeAttackHitbox.SetActive(false);
+                CurrentEnemyState = EnemyState.SearchingStart;
+            }
+        }
 
         switch (CurrentEnemyState)
         {
@@ -176,6 +200,11 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             case EnemyState.AttackingMelee:
 
                 AttackingMeleeUpdate();
+                break;
+
+            case EnemyState.SearchingStart:
+
+                SearchingStartUpdate();
                 break;
 
             case EnemyState.Searching:
@@ -318,7 +347,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));
         }
 
-        transform.position += transform.right * StrafeDirectionIndex * StrafingSpeed * Time.fixedDeltaTime;
+        transform.position += transform.right * StrafeDirectionIndex * StrafingSpeed * Time.deltaTime;
 
         if (StrafeDurationTimer > StrafeDuration)
         {
@@ -370,7 +399,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
             MeleeAttackHitbox.SetActive(true);
 
-            MeleeAttackTimer += Time.fixedDeltaTime;
+            MeleeAttackTimer += Time.deltaTime;
 
             if (MeleeAttackTimer > MeleeAttackDuration)
             {
@@ -382,9 +411,45 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         }
     }
 
+    void SearchingStartUpdate()
+    {
+        if (UpdateTicker % UpdateTickRate == 0)
+        {
+            if (LineOfSightCheck(NavigationMechAgent.pathEndPosition) == null)
+            {
+                CurrentSearchPoint = SearchPoints[UnityEngine.Random.Range(0, SearchPoints.Length)];
+                NavigationMechAgent.SetDestination(CurrentSearchPoint.transform.position);
+                CurrentEnemyState = EnemyState.Searching;
+            }
+        }
+
+        PlayerMovementScript PlayerScript = PlayerObject.GetComponent<PlayerMovementScript>();
+
+        if (PlayerScript.ShiftedThisFrame)
+        {
+            if (LineOfSightCheck(PlayerObject.transform.position).gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                FieldOfVisionObject.SetActive(false);
+                UnawareOfPlayerPosition = false;
+                CurrentEnemyState = EnemyState.Chasing;
+            }
+        }
+    }
+
     void SearchingUpdate()
     {
-        
+        PlayerMovementScript PlayerScript = PlayerObject.GetComponent<PlayerMovementScript>();
+
+        if (PlayerScript.ShiftedThisFrame)
+        {
+            Debug.Log("burh");
+            if (LineOfSightCheck(PlayerObject.transform.position).gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                FieldOfVisionObject.SetActive(false);
+                UnawareOfPlayerPosition = false;
+                CurrentEnemyState = EnemyState.Chasing;
+            }
+        }
     }
 
     void DyingUpdate()
@@ -435,8 +500,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
     }
 
     Collider2D LineOfSightCheck(Vector3 targetobjectposition)
-    {
-        RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position, targetobjectposition - transform.position, Vector2.Distance(transform.position, targetobjectposition));
+    {        RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position, targetobjectposition - transform.position, Vector2.Distance(transform.position, targetobjectposition), 320);
         return RaycastResult.collider;
     }
 
@@ -508,6 +572,16 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
             RotationTimer = 0;
         }
+
+        if (collider.gameObject == CurrentSearchPoint)
+        {
+            if (Vector2.Distance(transform.position, CurrentSearchPoint.transform.position) < 0.01)
+            {
+                SearchPointNeighours CurrentSearchPointNeighours = CurrentSearchPoint.GetComponent<SearchPointNeighours>();
+                CurrentSearchPoint = CurrentSearchPointNeighours.Neighours[UnityEngine.Random.Range(0, CurrentSearchPointNeighours.Neighours.Length)];
+                NavigationMechAgent.SetDestination(CurrentSearchPoint.transform.position);
+            }
+        }
         
         if (UpdateTicker % UpdateTickRate == 0)
         {
@@ -560,6 +634,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         Chasing,
         AttackingRanged,
         AttackingMelee,
+        SearchingStart,
         Searching,
         Dying
     }

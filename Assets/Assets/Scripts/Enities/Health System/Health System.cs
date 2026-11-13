@@ -1,8 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class HealthSystemScript : MonoBehaviour
+public class HealthSystem : MonoBehaviour
 {
     // The current and maximun amount of health points this object has.
     public int CurrentHealthPoints;
@@ -54,7 +52,7 @@ public class HealthSystemScript : MonoBehaviour
             {
                 if (gameObject.tag == "Player")
                 {
-                    PlayerMovementScript PlayerScript = gameObject.GetComponent<PlayerMovementScript>();
+                    PlayerInputSystem PlayerScript = gameObject.GetComponent<PlayerInputSystem>();
                     if (PlayerScript.Alive == true)
                     {
                         Debug.Log("Player is Dead");
@@ -73,12 +71,12 @@ public class HealthSystemScript : MonoBehaviour
                         PlayerScript.Dying();
                     }
                 }
-                else if (gameObject.tag == "Normal Enemy")
+                else if (gameObject.tag == "Enemy")
                 {
                     Debug.Log("Enemy is Dead");
-                    NormalEnemyBehaviourScript NormalEnemyScript = gameObject.GetComponent<NormalEnemyBehaviourScript>();
-                    NormalEnemyScript.DeathTargetPosition = damagesourceposition;
-                    NormalEnemyScript.CurrentEnemyState = NormalEnemyBehaviourScript.EnemyState.Dying;
+                    GuardBaseBehaviourSystem GuardBaseBehaviourSystemScript = gameObject.GetComponent<GuardBaseBehaviourSystem>();
+                    GuardBaseBehaviourSystemScript.DeathTargetPosition = damagesourceposition;
+                    GuardBaseBehaviourSystemScript.CurrentEnemyState = GuardBaseBehaviourSystem.EnemyState.Dying;
                 }
                 else
                 {

@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class SoundSourceLogicScript : MonoBehaviour
+public class SoundSourceLogic : MonoBehaviour
 {
-    private SoundSystemScript SoundScript;
+    private SoundSystem SoundSystemScript;
 
     // How long the sound lasts.
     public float SoundDuration;
 
     void Start()
     {
-        SoundScript = GameObject.FindWithTag("Sound Manager").GetComponent<SoundSystemScript>();
+        SoundSystemScript = GameObject.FindWithTag("Sound Manager").GetComponent<SoundSystem>();
     }
 
     void FixedUpdate()
@@ -19,7 +19,7 @@ public class SoundSourceLogicScript : MonoBehaviour
         // After the duration, the sound source object is despawned by the sound manager.
         if (SoundDuration <= 0)
         {
-            SoundScript.DespawnSoundSource(gameObject);
+            SoundSystemScript.DespawnSoundSource(gameObject);
         }
     }
 }

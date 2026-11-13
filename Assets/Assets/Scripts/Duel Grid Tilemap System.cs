@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static TileType;
 
-public class DuelTilemapSystemScript : MonoBehaviour
+public class DuelGridTilemapSystem : MonoBehaviour
 {
     // The 4 neighours of each wall visuals tiles.
     private Vector3Int[] TileNeighbours = new Vector3Int[]
@@ -15,7 +15,7 @@ public class DuelTilemapSystemScript : MonoBehaviour
         new Vector3Int(1, 1, 0) // Bottom Left
     };
 
-    // Tilemap used to determine the sprites of the sprite tilemap.
+    // Tilemap used to determine the sprites of the visual tilemap.
     public Tilemap PlacementTilemap;
 
     // The visual tilemap with all the sprites.

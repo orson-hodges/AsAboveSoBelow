@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -3222071317034355700}
   - component: {fileID: 3457054505378883818}
   m_Layer: 2
-  m_Name: Projectile
+  m_Name: Guard Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,7 +112,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3200
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

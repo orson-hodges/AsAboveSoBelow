@@ -1,7 +1,7 @@
 using System.Reflection.PortableExecutable;
 using UnityEngine;
 
-public class HealAndDamageScript : MonoBehaviour
+public class HealAndDamageSystem : MonoBehaviour
 {
     // The change in health points caused by this object.
     public int HealthPointChange;
@@ -12,10 +12,10 @@ public class HealAndDamageScript : MonoBehaviour
     void OnTriggerStay2D(Collider2D collider)
     {
         // Get a reference to the Health System Script of the hit object
-        HealthSystemScript HealthScript = collider.gameObject.GetComponent<HealthSystemScript>();
+        HealthSystem HealthSystemScript = collider.gameObject.GetComponent<HealthSystem>();
 
         // If the hit object doesn't have the Health System Script, the function ends to avoid errors.
-        if (HealthScript == null)
+        if (HealthSystemScript == null)
         {
             return;
         }
@@ -23,11 +23,11 @@ public class HealAndDamageScript : MonoBehaviour
         // Checks if it should call the heal or hurt function of the referenced Health System Script, depending on if HealthPointChange is positive or not. HealthPointChange being 0 results in no function being called.
         if (HealthPointChange > 0)
         {
-            HealthScript.Heal(HealthPointChange);
+            HealthSystemScript.Heal(HealthPointChange);
         }
         else if (HealthPointChange < 0)
         {
-            HealthScript.Hurt(HealthPointChange, transform.position, ContinuousContact);
+            HealthSystemScript.Hurt(HealthPointChange, transform.position, ContinuousContact);
         }
         else if (HealthPointChange == 0)
         {

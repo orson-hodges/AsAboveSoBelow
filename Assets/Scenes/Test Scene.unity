@@ -1940,8 +1940,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sound Manager
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3284128283203608543, guid: f7b02ee6275cc6d4686a066416c89195, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1988,7 +1987,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5019305488259230101, guid: 1134502b65bfeba4e9e230faaa35c785, type: 3}
       propertyPath: m_Name
-      value: Normal Enemy
+      value: Guard
       objectReference: {fileID: 0}
     - target: {fileID: 8427169669118579607, guid: 1134502b65bfeba4e9e230faaa35c785, type: 3}
       propertyPath: m_Enabled

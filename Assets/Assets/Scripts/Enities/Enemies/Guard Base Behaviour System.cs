@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NormalEnemyBehaviourScript : MonoBehaviour
+public class GuardBaseBehaviourSystem : MonoBehaviour
 {
     public float WalkingSpeed;
     public float RunningSpeed;
@@ -49,6 +48,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     private NavMeshAgent NavigationMechAgent;
     private GameObject PlayerObject;
+    private PlayerInputSystem PlayerInputSystemScript;
     [SerializeField] private GameObject FieldOfVisionObject;
 
     public bool IdleRotating;
@@ -93,6 +93,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
         NavigationMechAgent.speed = RunningSpeed;
 
         PlayerObject = GameObject.FindWithTag("Player");
+        PlayerInputSystemScript = PlayerObject.GetComponent<PlayerInputSystem>();
 
         SetRotationDuration();
         DefaultState = CurrentEnemyState;
@@ -145,9 +146,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void Update()
     {
-        PlayerMovementScript PlayerScript = PlayerObject.GetComponent<PlayerMovementScript>();
-
-        if (PlayerScript.ShiftedThisFrame)
+        if (PlayerInputSystemScript.ShiftedThisFrame)
         {
             if (!UnawareOfPlayerPosition)
             {
@@ -423,9 +422,7 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
             }
         }
 
-        PlayerMovementScript PlayerScript = PlayerObject.GetComponent<PlayerMovementScript>();
-
-        if (PlayerScript.ShiftedThisFrame)
+        if (PlayerInputSystemScript.ShiftedThisFrame)
         {
             if (LineOfSightCheck(PlayerObject.transform.position).gameObject.layer == LayerMask.NameToLayer("Player"))
             {
@@ -438,11 +435,8 @@ public class NormalEnemyBehaviourScript : MonoBehaviour
 
     void SearchingUpdate()
     {
-        PlayerMovementScript PlayerScript = PlayerObject.GetComponent<PlayerMovementScript>();
-
-        if (PlayerScript.ShiftedThisFrame)
+        if (PlayerInputSystemScript.ShiftedThisFrame)
         {
-            Debug.Log("burh");
             if (LineOfSightCheck(PlayerObject.transform.position).gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 FieldOfVisionObject.SetActive(false);

@@ -98,8 +98,8 @@ GameObject:
   - component: {fileID: 8503777575472974578}
   - component: {fileID: 8010821207915602311}
   m_Layer: 10
-  m_Name: Normal Enemy
-  m_TagString: Normal Enemy
+  m_Name: Guard
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

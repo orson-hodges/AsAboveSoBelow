@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 107272091765609009}
   - component: {fileID: 2423014749758030992}
-  - component: {fileID: 3284128283203608543}
   m_Layer: 0
   m_Name: Sound Manager
   m_TagString: Sound Manager
@@ -46,16 +45,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundSystemScript
   SoundSourcePrefab: {fileID: 4535553968754005676, guid: fb97f1463484fcf4e80804d68cebe318, type: 3}
---- !u!114 &3284128283203608543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3821028714715449081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dbc591e13566d348b6346f976ec4e08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::test
-  SoundScript: {fileID: 2423014749758030992}

@@ -1,7 +1,6 @@
-using UnityEditor;
 using UnityEngine;
 
-public class SoundSystemScript : MonoBehaviour
+public class SoundSystem : MonoBehaviour
 {
     public GameObject SoundSourcePrefab;
 

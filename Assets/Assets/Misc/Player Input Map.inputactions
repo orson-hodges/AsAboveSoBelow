@@ -47,7 +47,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "Look Into Shift",
+                    "name": "Look Into Above",
                     "type": "Value",
                     "id": "f3f2e2dd-7836-443a-9198-f5ddea94d3e7",
                     "expectedControlType": "",
@@ -153,7 +153,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Look Into Shift",
+                    "action": "Look Into Above",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

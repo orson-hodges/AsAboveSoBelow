@@ -10,7 +10,8 @@ TagManager:
   - Above Wall Sprite Tilemap
   - Above Wall Collision Tilemap
   - Search Point
-  - Enemy
+  - Above Enemy
+  - Below Enemy
   layers:
   - Default
   - TransparentFX

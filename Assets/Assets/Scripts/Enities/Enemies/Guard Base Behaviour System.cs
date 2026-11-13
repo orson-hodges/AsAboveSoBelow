@@ -64,8 +64,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
     private Vector3 CurrentAngle;
     private float AngleChange;
 
-    private int UpdateTicker;
-    public int UpdateTickRate;
+    public float UpdateTickRate;
+    private float UpdateTickRateTimer;
 
     public float WallCollisionCheckDistance;
 
@@ -114,6 +114,7 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
 
         SearchPoints = GameObject.FindGameObjectsWithTag("Search Point");
 
+        UpdateTickRateTimer = 0;
         IdleTimer = 0;
         InvestigatingTimer = 0;
         RangedAttackCooldownTimer = 0;
@@ -131,21 +132,17 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
         AngleChange = 0;
     }
 
-    void FixedUpdate()
-    {   
-        UpdateTicker += 1;
-
-        IdleTimer += Time.fixedDeltaTime;
-        InvestigatingTimer += Time.fixedDeltaTime;
-        RangedAttackCooldownTimer += Time.fixedDeltaTime;
-        StrafeDurationTimer += Time.fixedDeltaTime;
-        MeleeAttackPauseTimer += Time.fixedDeltaTime;
-        MeleeAttackCooldownTimer += Time.fixedDeltaTime;
-        RotationTimer += Time.fixedDeltaTime;
-    }
-
     void Update()
     {
+        UpdateTickRateTimer += Time.deltaTime;
+        IdleTimer += Time.deltaTime;
+        InvestigatingTimer += Time.deltaTime;
+        RangedAttackCooldownTimer += Time.deltaTime;
+        StrafeDurationTimer += Time.deltaTime;
+        MeleeAttackPauseTimer += Time.deltaTime;
+        MeleeAttackCooldownTimer += Time.deltaTime;
+        RotationTimer += Time.deltaTime;
+
         if (PlayerInputSystemScript.ShiftedThisFrame)
         {
             if (!UnawareOfPlayerPosition)
@@ -260,7 +257,7 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
     {
         LookTowardsObject(transform.eulerAngles, NavigationMechAgent.steeringTarget, 0.05f);
 
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTickRateTimer > UpdateTickRate)
         {   
             if (NavigationMechAgent.remainingDistance < InvestigatingDistance)
             {
@@ -276,6 +273,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
                     SetRotationDuration();
                 }  
             }
+
+            UpdateTickRateTimer = 0;
         }  
     }
 
@@ -333,17 +332,21 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
         
 
 
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTickRateTimer > UpdateTickRate)
         {
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));
+
+            UpdateTickRateTimer = 0;
         }
     }
 
     void AttackingRangedUpdate()
     {   
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTickRateTimer > UpdateTickRate)
         {
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));
+
+            UpdateTickRateTimer = 0;
         }
 
         transform.position += transform.right * StrafeDirectionIndex * StrafingSpeed * Time.deltaTime;
@@ -355,9 +358,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
             StrafeDuration = UnityEngine.Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
         }
 
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTickRateTimer > UpdateTickRate)
         {
-
             RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position + transform.right * WallCollisionCheckDistance, (transform.position - transform.right * WallCollisionCheckDistance * 2) - transform.position, WallCollisionCheckDistance * 2);
             RaycastHit2D CircleCastResult = Physics2D.CircleCast(transform.position, 1f, PlayerObject.transform.position - transform.position, Vector2.Distance(transform.position, PlayerObject.transform.position));
 
@@ -366,6 +368,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
                 StrafeDirectionIndex = StrafeDirectionIndex * -1;
                 StrafeDuration = UnityEngine.Random.Range(StrafeDurationMinimum, StrafeDurationMaximun);
             }
+
+            UpdateTickRateTimer = 0;
         }
 
         LookTowardsObject(transform.eulerAngles, PlayerObject.transform.position, 0.05f);
@@ -383,9 +387,11 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
 
     void AttackingMeleeUpdate()
     {
-        if (UpdateTicker % UpdateTickRate == 0 && MeleeAttackCooldownTimer <= MeleeAttackCooldown)
+        if (UpdateTickRateTimer > UpdateTickRate && MeleeAttackCooldownTimer <= MeleeAttackCooldown)
         {
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));
+
+            UpdateTickRateTimer = 0;
         }
 
         if (MeleeAttackPauseTimer < MeleeAttackPauseDuration)
@@ -412,7 +418,7 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
 
     void SearchingStartUpdate()
     {
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTickRateTimer > UpdateTickRate)
         {
             if (LineOfSightCheck(NavigationMechAgent.pathEndPosition) == null)
             {
@@ -420,6 +426,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
                 NavigationMechAgent.SetDestination(CurrentSearchPoint.transform.position);
                 CurrentEnemyState = EnemyState.Searching;
             }
+
+            UpdateTickRateTimer = 0;
         }
 
         if (PlayerInputSystemScript.ShiftedThisFrame)
@@ -494,7 +502,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
     }
 
     Collider2D LineOfSightCheck(Vector3 targetobjectposition)
-    {        RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position, targetobjectposition - transform.position, Vector2.Distance(transform.position, targetobjectposition), 320);
+    {        
+        RaycastHit2D RaycastResult = Physics2D.Raycast(transform.position, targetobjectposition - transform.position, Vector2.Distance(transform.position, targetobjectposition), 320);
         return RaycastResult.collider;
     }
 
@@ -577,7 +586,7 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
             }
         }
         
-        if (UpdateTicker % UpdateTickRate == 0)
+        if (UpdateTickRateTimer > UpdateTickRate)
         {
             if (collider.gameObject == PlayerObject && UnawareOfPlayerPosition == true)
             {
@@ -589,6 +598,8 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
                     CurrentEnemyState = EnemyState.Chasing;
                 }
             }
+
+            UpdateTickRateTimer = 0;
         }
     }
 

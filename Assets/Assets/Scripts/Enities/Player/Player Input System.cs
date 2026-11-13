@@ -16,6 +16,7 @@ public class PlayerInputSystem : MonoBehaviour
     private bool MeleeAttacking;
     private bool Shifting;
     [NonSerialized] public bool ShiftedThisFrame;
+    private bool LookingIntoAbove;
 
     public float MeleeAttackCooldown;
     private float MeleeAttackCooldownTimer;
@@ -28,6 +29,8 @@ public class PlayerInputSystem : MonoBehaviour
 
     [NonSerialized] public bool Alive;
     [NonSerialized] public Vector2 DeathTargetVector;
+
+    public GameObject[] AboveEnemyArray;
 
     public GameObject DeathScene;
 
@@ -42,6 +45,13 @@ public class PlayerInputSystem : MonoBehaviour
         DeathScene.SetActive(false);
 
         AboveWallSpriteTilemap = GameObject.FindWithTag("Above Wall Sprite Tilemap").GetComponent<TilemapRenderer>();
+
+        AboveEnemyArray = GameObject.FindGameObjectsWithTag("Above Enemy");
+
+        foreach (GameObject AboveEnemy in AboveEnemyArray)
+        {
+            AboveEnemy.GetComponent<SpriteRenderer>().enabled = false;
+        }
 
         AboveWallSpriteTilemap.enabled = false;
 
@@ -150,6 +160,15 @@ public class PlayerInputSystem : MonoBehaviour
         if (Shifting)
         {
             AboveWallSpriteTilemap.enabled = true;
+
+            foreach (GameObject AboveEnemy in AboveEnemyArray)
+            {
+                AboveEnemy.GetComponent<SpriteRenderer>().enabled = true;
+                SunsetterBaseBehaviourSystem SunsetterBaseBehaviourSystemScript = AboveEnemy.GetComponent<SunsetterBaseBehaviourSystem>();
+                SunsetterBaseBehaviourSystemScript.CurrentState = SunsetterBaseBehaviourSystem.States.Chasing;
+                SunsetterBaseBehaviourSystemScript.SunsetterBody.linearVelocity = Vector2.zero;
+            }
+
             gameObject.GetComponent<Collider2D>().excludeLayers += LayerMask.GetMask("Below Wall Collision Tilemap", "Below Enemy");
             gameObject.GetComponent<Collider2D>().excludeLayers -= LayerMask.GetMask("Above Wall Collision Tilemap", "Above Enemy");
             gameObject.layer = LayerMask.NameToLayer("Player (Above)");
@@ -157,6 +176,16 @@ public class PlayerInputSystem : MonoBehaviour
         else if (Alive)
         {
             AboveWallSpriteTilemap.enabled = false;
+
+            foreach (GameObject AboveEnemy in AboveEnemyArray)
+            {
+                AboveEnemy.GetComponent<SpriteRenderer>().enabled = false;
+                SunsetterBaseBehaviourSystem SunsetterBaseBehaviourSystemScript = AboveEnemy.GetComponent<SunsetterBaseBehaviourSystem>();
+                SunsetterBaseBehaviourSystemScript.CurrentState = SunsetterBaseBehaviourSystem.States.Wondering;
+                SunsetterBaseBehaviourSystemScript.HomePosition = AboveEnemy.transform.position;
+                SunsetterBaseBehaviourSystemScript.NavigationMechAgent.ResetPath();
+            }
+
             gameObject.GetComponent<Collider2D>().excludeLayers -= LayerMask.GetMask("Below Wall Collision Tilemap", "Below Enemy");
             gameObject.GetComponent<Collider2D>().excludeLayers += LayerMask.GetMask("Above Wall Collision Tilemap", "Above Enemy");
             gameObject.layer = LayerMask.NameToLayer("Player");
@@ -172,6 +201,30 @@ public class PlayerInputSystem : MonoBehaviour
                 PlayerBody.GetComponent<Collider2D>().enabled = false;
                 Dying();
                 break;
+            }
+        }
+    }
+
+    void OnLookIntoAbove(InputValue inputvalue)
+    {
+        LookingIntoAbove = inputvalue.Get<float>() > 0;
+
+        if (LookingIntoAbove)
+        {
+            AboveWallSpriteTilemap.enabled = true;
+
+            foreach (GameObject AboveEnemy in AboveEnemyArray)
+            {
+                AboveEnemy.GetComponent<SpriteRenderer>().enabled = true;
+            }
+        }
+        else
+        {
+            AboveWallSpriteTilemap.enabled = false;
+
+            foreach (GameObject AboveEnemy in AboveEnemyArray)
+            {
+                AboveEnemy.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
     }

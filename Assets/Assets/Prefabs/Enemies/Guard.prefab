@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 8010821207915602311}
   m_Layer: 10
   m_Name: Guard
-  m_TagString: Enemy
+  m_TagString: Below Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -197,7 +197,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 640
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -302,7 +302,7 @@ MonoBehaviour:
   AngleOfIdleRotationArray: []
   DurationOfIdleRotationArray: []
   ProjectilePrefab: {fileID: 1474719714268018455, guid: 53caf9106c9a07d4b8fa5b4d5f90d128, type: 3}
-  UpdateTickRate: 10
+  UpdateTickRate: 0.2
   WallCollisionCheckDistance: 1
   PatrolPath:
   - {fileID: 0}

@@ -71,7 +71,7 @@ public class HealthSystem : MonoBehaviour
                         PlayerScript.Dying();
                     }
                 }
-                else if (gameObject.tag == "Enemy")
+                else if (gameObject.tag == "Below Enemy")
                 {
                     Debug.Log("Enemy is Dead");
                     GuardBaseBehaviourSystem GuardBaseBehaviourSystemScript = gameObject.GetComponent<GuardBaseBehaviourSystem>();

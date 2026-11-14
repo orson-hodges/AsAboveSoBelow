@@ -14,6 +14,9 @@ public class SunsetterBaseBehaviourSystem : MonoBehaviour
     [NonSerialized] public Vector2 HomePosition;
     public float MaximunDistanceFromHomePosition;
 
+    public float AggressionRange;
+    private bool Aggressed;
+
     private GameObject PlayerObject;
     
     [NonSerialized] public States CurrentState;
@@ -23,6 +26,8 @@ public class SunsetterBaseBehaviourSystem : MonoBehaviour
         NavigationMechAgent = GetComponent<NavMeshAgent>();
         NavigationMechAgent.updateRotation = false;
         NavigationMechAgent.updateUpAxis = false;
+
+        Aggressed = false;
 
         SunsetterBody = gameObject.GetComponent<Rigidbody2D>();
 
@@ -39,15 +44,65 @@ public class SunsetterBaseBehaviourSystem : MonoBehaviour
 
         switch (CurrentState)
         {
+            case States.WonderingStart:
+
+                WonderingStartUpdate();
+                break;
+
             case States.Wondering:
 
-            WonderingUpdate();
-            break;
+                WonderingUpdate();
+                break;
 
             case States.Chasing:
 
-            ChasingUpdate();
-            break;
+                ChasingUpdate();
+                break;
+        }
+
+        if (PlayerObject.layer == LayerMask.NameToLayer("Player (Above)"))
+        {
+            if (!Aggressed)
+            {
+                if (Vector2.Distance(transform.position, PlayerObject.transform.position) <= AggressionRange)
+                {
+                    Aggressed = true;
+                    SunsetterBody.linearVelocity = Vector2.zero;
+                    CurrentState = States.Chasing;
+                }
+            }
+            else if (Vector2.Distance(transform.position, PlayerObject.transform.position) > AggressionRange)
+            {
+                Aggressed = false;
+                CurrentState = States.WonderingStart;
+                NavigationMechAgent.ResetPath();
+                SunsetterBody.linearVelocity = NavigationMechAgent.velocity;
+                SunsetterBody.linearDamping = 1;            
+            }
+        }
+        else if (Aggressed)
+        {
+            Aggressed = false;
+            CurrentState = States.WonderingStart;
+            NavigationMechAgent.ResetPath();
+            SunsetterBody.linearVelocity = NavigationMechAgent.velocity;
+            SunsetterBody.linearDamping = 1;
+        }
+    }
+
+    void WonderingStartUpdate()
+    {
+        SunsetterBody.linearVelocityX += UnityEngine.Random.Range(-0.1f, 0.1f);
+        SunsetterBody.linearVelocityY += UnityEngine.Random.Range(-0.1f, 0.1f);
+
+        if (SunsetterBody.linearVelocityX <= 1 && SunsetterBody.linearVelocityX >= -1)
+        {
+            if (SunsetterBody.linearVelocityY <= 1 && SunsetterBody.linearVelocityY >= -1)
+            {
+                SunsetterBody.linearDamping = 0;
+                HomePosition = transform.position;
+                CurrentState = States.Wondering;
+            }
         }
     }
 
@@ -128,6 +183,7 @@ public class SunsetterBaseBehaviourSystem : MonoBehaviour
 
     public enum States
     {
+        WonderingStart,
         Wondering,
         Chasing
     }

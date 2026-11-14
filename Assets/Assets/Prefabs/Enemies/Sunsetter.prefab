@@ -195,3 +195,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SunsetterBaseBehaviourSystem
   UpdateTickRate: 0.2
   MaximunDistanceFromHomePosition: 10
+  AggressionRange: 6

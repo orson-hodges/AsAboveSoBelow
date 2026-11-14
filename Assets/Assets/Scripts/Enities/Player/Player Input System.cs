@@ -90,25 +90,31 @@ public class PlayerInputSystem : MonoBehaviour
         RangedAttackCooldownTimer += Time.deltaTime;
         MeleeAttackCooldownTimer += Time.deltaTime;
 
-        if (RangedAttacking)
+        if (!Shifting)
         {
-            if (RangedAttackCooldownTimer > RangedAttackFireRate)
+            if (!LookingIntoAbove)
             {
-                Instantiate(PlayerProjectilePrefab, transform.position, transform.rotation);
-                RangedAttackCooldownTimer = 0;
+                if (RangedAttacking && !MeleeAttacking)
+                {
+                    if (RangedAttackCooldownTimer > RangedAttackFireRate)
+                    {
+                        Instantiate(PlayerProjectilePrefab, transform.position, transform.rotation);
+                        RangedAttackCooldownTimer = 0;
+                    }
+                }
             }
         }
 
         if (MeleeAttacking)
         {
-            MeleeAttackDurationTimer += Time.deltaTime;
-            
+            MeleeAttackDurationTimer += Time.deltaTime;        
+                
             if (MeleeAttackDurationTimer > MeleeAttackDuration)
             {
                 MeleeAttackHitbox.SetActive(false);
                 MeleeAttacking = false;
             }
-        }
+        }  
 
         if (ShiftedThisFrame)
         {
@@ -143,7 +149,7 @@ public class PlayerInputSystem : MonoBehaviour
 
     void OnMeleeAttack()
     {
-        if (MeleeAttackCooldownTimer > MeleeAttackCooldown)
+        if (MeleeAttackCooldownTimer > MeleeAttackCooldown && !Shifting && !LookingIntoAbove)
         {
             MeleeAttackHitbox.SetActive(true);
             MeleeAttackCooldownTimer = 0;
@@ -164,9 +170,6 @@ public class PlayerInputSystem : MonoBehaviour
             foreach (GameObject AboveEnemy in AboveEnemyArray)
             {
                 AboveEnemy.GetComponent<SpriteRenderer>().enabled = true;
-                SunsetterBaseBehaviourSystem SunsetterBaseBehaviourSystemScript = AboveEnemy.GetComponent<SunsetterBaseBehaviourSystem>();
-                SunsetterBaseBehaviourSystemScript.CurrentState = SunsetterBaseBehaviourSystem.States.Chasing;
-                SunsetterBaseBehaviourSystemScript.SunsetterBody.linearVelocity = Vector2.zero;
             }
 
             gameObject.GetComponent<Collider2D>().excludeLayers += LayerMask.GetMask("Below Wall Collision Tilemap", "Below Enemy");
@@ -175,15 +178,14 @@ public class PlayerInputSystem : MonoBehaviour
         }
         else if (Alive)
         {
-            AboveWallSpriteTilemap.enabled = false;
-
-            foreach (GameObject AboveEnemy in AboveEnemyArray)
+            if (!LookingIntoAbove)
             {
-                AboveEnemy.GetComponent<SpriteRenderer>().enabled = false;
-                SunsetterBaseBehaviourSystem SunsetterBaseBehaviourSystemScript = AboveEnemy.GetComponent<SunsetterBaseBehaviourSystem>();
-                SunsetterBaseBehaviourSystemScript.CurrentState = SunsetterBaseBehaviourSystem.States.Wondering;
-                SunsetterBaseBehaviourSystemScript.HomePosition = AboveEnemy.transform.position;
-                SunsetterBaseBehaviourSystemScript.NavigationMechAgent.ResetPath();
+                AboveWallSpriteTilemap.enabled = false;
+
+                foreach (GameObject AboveEnemy in AboveEnemyArray)
+                {
+                    AboveEnemy.GetComponent<SpriteRenderer>().enabled = false;
+                }
             }
 
             gameObject.GetComponent<Collider2D>().excludeLayers -= LayerMask.GetMask("Below Wall Collision Tilemap", "Below Enemy");
@@ -209,7 +211,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         LookingIntoAbove = inputvalue.Get<float>() > 0;
 
-        if (LookingIntoAbove)
+        if (LookingIntoAbove && !Shifting)
         {
             AboveWallSpriteTilemap.enabled = true;
 
@@ -218,7 +220,7 @@ public class PlayerInputSystem : MonoBehaviour
                 AboveEnemy.GetComponent<SpriteRenderer>().enabled = true;
             }
         }
-        else
+        else if (!Shifting)
         {
             AboveWallSpriteTilemap.enabled = false;
 

@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test Scene.unity
+    path: Assets/Assets/Scenes/General Test Scene/General Test Scene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Assets/Scenes/Level Transition Test Scene/Level Transition Test Scene (Entrance).unity
+    guid: 193f84956ac0f0c40ada7a3c24ce59ac
+  - enabled: 1
+    path: Assets/Assets/Scenes/Level Transition Test Scene/Level Transition Test Scene (Exit).unity
+    guid: 14c7fce438350c549bfec7e1c3c20df6
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c9044be836b6b954f94a09bfdeb8095a, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: d03cc73e94c9f1f4c9774fa0aa6c6b92, type: 3}

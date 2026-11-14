@@ -330,8 +330,6 @@ public class GuardBaseBehaviourSystem : MonoBehaviour
 
         LookTowardsObject(transform.eulerAngles, NavigationMechAgent.steeringTarget, 0.05f);
         
-
-
         if (UpdateTickRateTimer > UpdateTickRate)
         {
             AttackRangeCheck(Vector2.Distance(transform.position, PlayerObject.transform.position));

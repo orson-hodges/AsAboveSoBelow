@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8291183307708883554}
   - component: {fileID: -6286942913693492064}
   - component: {fileID: 2082807706130837370}
+  - component: {fileID: 3271732809955508215}
   m_Layer: 9
   m_Name: Sunsetter
   m_TagString: Above Enemy
@@ -196,3 +197,17 @@ MonoBehaviour:
   UpdateTickRate: 0.2
   MaximunDistanceFromHomePosition: 10
   AggressionRange: 6
+--- !u!114 &3271732809955508215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5693087732900196631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c8d93d6adf51d429cffde1008a9fce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealAndDamageSystem
+  HealthPointChange: -50
+  ContinuousContact: 1

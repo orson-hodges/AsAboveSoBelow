@@ -34,7 +34,7 @@ public class PlayerInputSystem : MonoBehaviour
 
     public GameObject DeathScene;
 
-    private TilemapRenderer AboveWallSpriteTilemap;
+    [NonSerialized] public TilemapRenderer AboveWallSpriteTilemap;
 
     public InputActionAsset InputMap;
 

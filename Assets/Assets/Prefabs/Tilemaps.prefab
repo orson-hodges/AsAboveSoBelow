@@ -181,42 +181,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028a873470c5ab244955e91bccc4b61b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DuelTilemapSystem
-  PlacementTilemap: {fileID: 0}
-  SpriteTilemap: {fileID: 0}
+  PlacementTilemap: {fileID: 574729303269630177}
+  SpriteTilemap: {fileID: 8351923453733508757}
   TilemapWidth: 100
   TilemapHeight: 100
   Tile0Set:
   - {fileID: 0}
   Tile1Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: dad2fa28c2cc89e4782c175cc0ac16fb, type: 2}
   Tile2Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: b7aa84744b6ae054d85f88fa0a3e76cf, type: 2}
   Tile3Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: e381ca8061c2f904794a740e6150f742, type: 2}
   Tile4Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: bf46e3152d2a27241a41765116b46996, type: 2}
   Tile5Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 5cceed87e5777dc45b0aeb1e2659555d, type: 2}
   Tile6Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: fde22f8a269a8334692bf69b222f3114, type: 2}
   Tile7Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 20d7df5739541624daec6c6f66777984, type: 2}
   Tile8Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 80047122b9fd91e4ca7c59563c30001f, type: 2}
   Tile9Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: d75db74b389fd3245aaa96a921e618a3, type: 2}
   Tile10Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: fa8abba858bc1f945ab0bfab8bc848e1, type: 2}
   Tile11Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 23cca37e39997124fa8f6fcb63f0e01b, type: 2}
   Tile12Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 20975d66ae906b644a69f3468a6873fa, type: 2}
   Tile13Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 8910927ad4a81be4381a40cd2ce8b86f, type: 2}
   Tile14Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 68a12c9ca37cf4444b23d039075b2d10, type: 2}
   Tile15Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: fd8a51c7512dddd49a84ec219aae1ced, type: 2}
 --- !u!19719996 &3112722231146123791
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -408,7 +408,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 5579c978c4c5dbc41810f4cbbbed3b2b, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!114 &3860802076449500132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,7 +821,7 @@ MonoBehaviour:
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
-  m_NavMeshData: {fileID: 23800000, guid: 9b3e3fea798d68440a0a7d470a5cde85, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!114 &5976542649392453388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -993,37 +993,37 @@ MonoBehaviour:
   TilemapWidth: 100
   TilemapHeight: 100
   Tile0Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 4885c9e6b5865ef4d91d22168e488e5f, type: 2}
   Tile1Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 72f736c23272c244e8e5891e8710f808, type: 2}
   Tile2Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: cfb34c6f82bc6624eb5afadc760e1360, type: 2}
   Tile3Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: f8573c902f11d0741a7f1b93a000e63d, type: 2}
   Tile4Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 93e9ebe8f03f4c74eb6f10621f1d5d0a, type: 2}
   Tile5Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 0b5b0f3d338b15e4bb8723e8ca48c41d, type: 2}
   Tile6Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: cbb8db66a6702e14f95743c28a3007a3, type: 2}
   Tile7Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: fce4139bd0a6b894c854608de1bc6db7, type: 2}
   Tile8Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: bec83a487554a184b84759dafbf38844, type: 2}
   Tile9Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 66998eec3d3fd72469bd801b6a1d2d0b, type: 2}
   Tile10Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 7b0f965f59512914caed73a43aa2411c, type: 2}
   Tile11Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 272e36f2d422c724785c874cba7e0106, type: 2}
   Tile12Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: a07854e7edbe5d544a419ec6ff56e7a9, type: 2}
   Tile13Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 94b3179843fad054683f3c57ebbaba1f, type: 2}
   Tile14Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: b3c431cc3dbddc840a16ff5cb4adad60, type: 2}
   Tile15Set:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 1103143b9ae837643afc69428cccc28c, type: 2}
 --- !u!19719996 &763362268668067078
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -1031,7 +1031,7 @@ TilemapCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5030708889084069509}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -1127,7 +1127,9 @@ CompositeCollider2D:
   m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 763362268668067078}
+    m_ColliderPaths: []
   m_CompositePaths:
     m_Paths: []
   m_VertexDistance: 0.0005
